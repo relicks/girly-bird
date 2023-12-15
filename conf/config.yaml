@@ -1,0 +1,26 @@
+assets:
+  path: ./assets/
+  fonts_path: ${.path}/fonts
+  img_path: ${.path}/img
+  sound_path: ${.path}/sound
+window:
+  fps: 60
+  screen_width: 432
+  screen_height: 468
+  caption: "Chilly Bird"
+  icon_path: ${assets.img_path}/icons/game.icon.png
+fonts:
+  color:
+  - 235
+  - 221
+  - 190
+  score_font: ${assets.fonts_path}/arcadeclassic.ttf
+  score_font_size: 30
+  text_font: ${assets.fonts_path}/arcadeclassic.ttf
+  text_font_size: 18
+main_scene:
+  bg_img:  ${assets.img_path}/backgrounds/background.png
+  road_texture:  ${assets.img_path}/objects/road.png
+  restart_button_img:  ${assets.img_path}/objects/restart.button.png
+  disappointed_girl_img:  ${assets.img_path}/objects/disappointed.girl.png
+  bg_music:  ${assets.sound_path}/game.music.mp3

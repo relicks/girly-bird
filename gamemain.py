@@ -1,28 +1,59 @@
+from dataclasses import dataclass
+from pathlib import Path
 import pygame as pg
 import pygame.locals as l
 import random
 from pygame import mixer
 
+
 pg.init()
 
-"""Setting the game's timeframe"""
-FPS = 60
-clock = pg.time.Clock()
 
-"""Naming the game, setting the screen size, game icon and music"""
+# ! Naming the game, setting the screen size, game icon and music
+@dataclass
+class Window:
+    caption: str
+    icon_path: Path
+    fps: int = 60
+    screen_width: int = 432
+    screen_height: int = 468
+
+
+FPS = 60  # ! Setting the game's timeframe
 SCREEN_WIDTH = 432
 SCREEN_HEIGHT = 468
-screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+DISPLAYSURF = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pg.display.set_caption("Chilly Bird")
 pg.display.set_icon(pg.image.load("game_files/game.icon.png"))
-mixer.music.load("game_files/game.music.mp3")
 
 """Defining the fonts and their color"""
+
+
+@dataclass
+class Fonts:
+    color: tuple[int, int, int]
+    score_font: Path
+    score_font_size: int
+    text_font: Path
+    text_font_size: int
+
+
 color = (235, 221, 190)
 font1 = pg.font.Font("game_files/arcadeclassic.ttf", 30)  # For displaying the score
 font2 = pg.font.Font("game_files/arcadeclassic.ttf", 18)  # For instructing a player
 
 """Loading the images"""
+
+
+@dataclass
+class MainSceneAssets:
+    bg_img: Path
+    road_texture: Path
+    restart_button_img: Path
+    disappointed_girl_img: Path
+    bg_music: Path
+
+
 background = pg.image.load(
     "game_files/background.png"
 ).convert()  # Convert() enables faster blitting -> improves performance
@@ -31,34 +62,27 @@ restart_button = pg.image.load("game_files/restart.button.png").convert()
 disappointed_girl = pg.image.load(
     "game_files/disappointed.girl.png"
 ).convert_alpha()  # transparent background
+mixer.music.load("game_files/game.music.mp3")
 
 """Setting the game's parameters (values)"""
-ROAD_SCROLL = 0
 SPEED_SCROLL = 2
 PIPE_FREQ = 1250  # New pipes appear every 1.25 seconds
 GAP_BTW_PIPES = 100
-leftmost_pipe = (
-    pg.time.get_ticks() - PIPE_FREQ
-)  # First pipe appears right when the game starts (i.e. without a 1.25 seconds delay unlike the subsequent ones)
-WITHIN_PIPE = False
-SCORE = 0
-IS_FLYING = False
-GAME_IS_OVER = False
 
 
 def draw_text(text, font, text_col, x, y):  # Instructs a player and displays score
-    global screen
+    global DISPLAYSURF
     image = font.render(text, True, text_col)
-    screen.blit(image, (x, y))
+    DISPLAYSURF.blit(image, (x, y))
 
 
 def reset_game():  # Returns everything to its pre-launched position
-    global pipe_group, chilly_bird, SCORE
+    global pipe_group, chilly_bird, score
     pipe_group.empty()
     chilly_bird.rect.x = 50
     chilly_bird.rect.y = round(SCREEN_HEIGHT / 2)
-    SCORE = 0
-    return SCORE
+    score = 0
+    return score
 
 
 class Bird(pg.sprite.Sprite):
@@ -76,14 +100,14 @@ class Bird(pg.sprite.Sprite):
         self.clicked = False
 
     def update(self):
-        if IS_FLYING:
+        if is_flying:
             """Creating the force that constantly pulls the bird down (essentially gravity)"""
             self.gravity += 0.17
             self.gravity = min(self.gravity, 2.6)
             if self.rect.bottom < 384:
                 self.rect.y += int(self.gravity)
 
-        if not GAME_IS_OVER:
+        if not game_is_over:
             """Creating the bird's ability to jump"""
             if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
                 self.clicked = True
@@ -149,7 +173,7 @@ class RestartButton:
         if self.rect.collidepoint(pos):
             if pg.mouse.get_pressed()[0] == 1:
                 action = True
-        screen.blit(self.image, self.rect)
+        DISPLAYSURF.blit(self.image, self.rect)
         return action
 
 
@@ -159,25 +183,38 @@ class Girl:
         self.rect = self.image.get_rect(topleft=(x, y))
 
     def draw(self):
-        global screen
-        screen.blit(self.image, self.rect)
+        global DISPLAYSURF
+        DISPLAYSURF.blit(self.image, self.rect)
 
 
+# ? Setting initial flags
+initial_road_scroll = 0
+within_pipe = False
+score = 0
+is_flying = False
+game_is_over = False
+
+# ? Setting objects
 bird_group = pg.sprite.Group()
 chilly_bird = Bird(50, SCREEN_HEIGHT / 2)
 bird_group.add(chilly_bird)
 
 pipe_group = pg.sprite.Group()
+# First pipe appears right when the game starts
+# (i.e. without a 1.25 seconds delay unlike the subsequent ones)
+leftmost_pipe = pg.time.get_ticks() - PIPE_FREQ
+
 
 button = RestartButton(SCREEN_WIDTH / 2 - 40, SCREEN_HEIGHT / 2 - 80, restart_button)
 girl = Girl(140, 200, disappointed_girl)
 
 pg.mixer.music.play(-1)  # Infinite music loop
+clock = pg.time.Clock()
 
 game_is_running = True
 while game_is_running:
     clock.tick(FPS)
-    screen.blit(background, (0, 0))
+    DISPLAYSURF.blit(background, (0, 0))
 
     if pg.mouse.get_pressed()[1]:
         pg.mixer.music.fadeout(
@@ -186,7 +223,7 @@ while game_is_running:
     if pg.mouse.get_pressed()[2]:
         pg.mixer.music.play(-1)  # Unmutes the music if right mouse button is pressed
 
-    if IS_FLYING is False and GAME_IS_OVER is False:
+    if is_flying is False and game_is_over is False:
         draw_text(
             "    ".join("press left mouse button to start the game".split()),
             font2,
@@ -208,10 +245,10 @@ while game_is_running:
             5,
             305,
         )
-    bird_group.draw(screen)
+    bird_group.draw(DISPLAYSURF)
     bird_group.update()
-    pipe_group.draw(screen)
-    screen.blit(road, (ROAD_SCROLL, 384))
+    pipe_group.draw(DISPLAYSURF)
+    DISPLAYSURF.blit(road, (initial_road_scroll, 384))
 
     """Counting player's score"""
     if len(pipe_group) > 0:  # Some pipes had been created
@@ -224,30 +261,30 @@ while game_is_running:
             < pipe_group.sprites()[
                 0
             ].rect.right  # But the bird's rightmost point has not passed the rightmost point of the pipe
-            and not WITHIN_PIPE
+            and not within_pipe
         ):
-            WITHIN_PIPE = True  # The bird is within the range of the leftmost and rightmost points of the pipe
+            within_pipe = True  # The bird is within the range of the leftmost and rightmost points of the pipe
 
-        if WITHIN_PIPE:
+        if within_pipe:
             if (
                 bird_group.sprites()[0].rect.left > pipe_group.sprites()[0].rect.right
             ):  # And only if the bird's leftmost point passes the rightmost point of a pipe, one point is added to the score
-                SCORE += 1
-                WITHIN_PIPE = False  # The bird is not within the range of the extreme points of a particular pipe
+                score += 1
+                within_pipe = False  # The bird is not within the range of the extreme points of a particular pipe
 
-    draw_text(str(SCORE), font1, color, SCREEN_WIDTH / 2, 12)
+    draw_text(str(score), font1, color, SCREEN_WIDTH / 2, 12)
 
     if (
         pg.sprite.groupcollide(bird_group, pipe_group, False, False)
         or chilly_bird.rect.top < 0  # The bird hits the top of the screen
     ):
-        GAME_IS_OVER = True
+        game_is_over = True
 
     if chilly_bird.rect.bottom >= 384:
-        GAME_IS_OVER = True
-        IS_FLYING = False
+        game_is_over = True
+        is_flying = False
 
-    if not GAME_IS_OVER and IS_FLYING:
+    if not game_is_over and is_flying:
         """Generating new pipes"""
         current_time = pg.time.get_ticks()
         if (
@@ -262,23 +299,23 @@ while game_is_running:
             pipe_group.add(pipe_up)
             leftmost_pipe = current_time
         """Making the road scrolling"""
-        ROAD_SCROLL -= SPEED_SCROLL
-        if abs(ROAD_SCROLL) > 17:
-            ROAD_SCROLL = 0
+        initial_road_scroll -= SPEED_SCROLL
+        if abs(initial_road_scroll) > 17:
+            initial_road_scroll = 0
         pipe_group.update()
 
-    if GAME_IS_OVER:
+    if game_is_over:
         girl.draw()
         if button.draw():
-            GAME_IS_OVER = False
-            SCORE = reset_game()
+            game_is_over = False
+            score = reset_game()
 
     for event in pg.event.get():
         if event.type == l.QUIT:
             game_is_running = False
 
-        if event.type == pg.MOUSEBUTTONDOWN and not IS_FLYING and not GAME_IS_OVER:
-            IS_FLYING = True
+        if event.type == pg.MOUSEBUTTONDOWN and not is_flying and not game_is_over:
+            is_flying = True
     pg.display.update()
 
 pg.quit()
