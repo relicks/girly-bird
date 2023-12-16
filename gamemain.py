@@ -1,22 +1,31 @@
+import random
 from dataclasses import dataclass
 from pathlib import Path
+
 import pygame as pg
 import pygame.locals as l
-import random
 from pygame import mixer
+
+from chilly_bird.configs import load_config
+
+
+class GameState:
+    def __init__(self) -> None:
+        raise NotImplementedError
+
+
+class Game:
+    def __init__(self) -> None:
+        raise NotImplementedError
+
+    def run(self):
+        raise NotImplementedError
 
 
 pg.init()
 
 
 # ! Naming the game, setting the screen size, game icon and music
-@dataclass
-class Window:
-    caption: str
-    icon_path: Path
-    fps: int = 60
-    screen_width: int = 432
-    screen_height: int = 468
 
 
 FPS = 60  # ! Setting the game's timeframe
@@ -27,15 +36,6 @@ pg.display.set_caption("Chilly Bird")
 pg.display.set_icon(pg.image.load("game_files/game.icon.png"))
 
 """Defining the fonts and their color"""
-
-
-@dataclass
-class Fonts:
-    color: tuple[int, int, int]
-    score_font: Path
-    score_font_size: int
-    text_font: Path
-    text_font_size: int
 
 
 color = (235, 221, 190)
