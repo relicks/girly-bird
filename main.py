@@ -1,4 +1,4 @@
-# flake8: noqa: PLR0912, PLR0913
+# flake8: noqa: PLR0912, PLR0913, PLR2004
 import random
 import sys
 from pathlib import Path
@@ -420,10 +420,14 @@ def configure_logger(
         logger.add(sys.stderr, level="INFO")
 
 
-if __name__ == "__main__":
+def main():
     configure_logger(print_stdout=True)
     cfg = load_config()
 
     logger.info("Initializing Game")
     game = Game(cfg.window.screen_width, cfg.window.screen_height)
     game.run()
+
+
+if __name__ == "__main__":
+    main()

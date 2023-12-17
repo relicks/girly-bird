@@ -2,4 +2,7 @@
 venv/
 .venv/
 logs/
+src/*.egg-info
+.pdm-python
+.python-version
 __pycache__
