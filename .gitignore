@@ -2,7 +2,14 @@
 venv/
 .venv/
 logs/
+<<<<<<< HEAD
 build/
 __pycache__
 .pdm-python
 .python-version
+=======
+src/*.egg-info
+.pdm-python
+.python-version
+__pycache__
+>>>>>>> 80ba7a8 (Moved to pdm)
