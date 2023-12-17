@@ -1,6 +1,5 @@
+# flake8: noqa: PLR0913
 import random
-from dataclasses import dataclass
-from pathlib import Path
 
 import pygame as pg
 import pygame.locals as l
@@ -9,16 +8,125 @@ from pygame import mixer
 from chilly_bird.configs import load_config
 
 
+class Bird(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)  # Constructor for the sprite class
+        self.images = [
+            pg.image.load(f"game_files/bird/bird{num}.png")
+            for num in range(1, 4)  # Creates the bird animation
+        ]
+        self.i = 0  # Index of the image in the self.images list
+        self.anim_spd = 0  # Speed at which the animation runs
+        self.image = self.images[self.i]
+        self.rect = self.image.get_rect(center=(x, y))
+        self.jump_sound = pg.mixer.Sound("./assets/sound/jump_sound.mp3")
+        self.gravity = 0
+        self.clicked = False
+
+    def update(self):
+        if is_flying:
+            # Creating the force that constantly pulls
+            # the bird down (essentially gravity)
+            self.gravity += 0.17
+            self.gravity = min(self.gravity, 2.6)
+            if self.rect.bottom < 384:
+                self.rect.y += int(self.gravity)
+
+        if not game_is_over:
+            """Creating the bird's ability to jump"""
+            if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
+                self.clicked = True
+                self.gravity = -3.5
+                self.jump_sound.play()
+            if not pg.mouse.get_pressed()[0] == 1:
+                self.clicked = False
+
+            """Flapping animation"""
+            self.anim_spd += 1
+            anim_spd_limit = 5  # flapping animation speed
+            if self.anim_spd > anim_spd_limit:
+                # Otherwise the speed of the wings flapping
+                # would be indefinitely increasing
+                self.anim_spd = 0
+                self.i += 1
+                if self.i >= len(self.images):
+                    # In order to create an endless loop of animation and
+                    # the bird would not stop flapping its wings right after
+                    # the first iteration of the list
+                    self.i = 0
+            # Improving the animation of jumping:
+            self.image = pg.transform.rotate(self.images[self.i], self.gravity * -1.25)
+        else:
+            # Animaton of the bird falling:
+            self.image = pg.transform.rotate(self.images[self.i], -75)
+            self.gravity = 10
+
+
 class GameState:
     def __init__(self) -> None:
         raise NotImplementedError
 
 
 class Game:
-    def __init__(self) -> None:
+    def __init__(self, screen_width, screen_height) -> None:
+        self.running = False
+        self.fps = 60
+        self.clock = pg.time.Clock()
+        self.display: pg.Surface = pg.display.set_mode((screen_width, screen_height))
+
+        # TODO: Maybe move to GameState:
+        self.flying = False
+        self.pipe_group: pg.sprite.Group = ...
+        self.chilly_bird: Bird = ...
+        self.score = ...
+        self.road_scroll = 0
+        raise NotImplementedError
+
+    def draw_text(self, text, font, text_col, x, y):
+        """Instructs a player and displays score."""
+        image = font.render(text, True, text_col)
+        self.display.blit(image, (x, y))
+
+    def reset_game(self):
+        """Resets everything to its pre-launched position."""
+        self.pipe_group.empty()
+        self.chilly_bird.rect.x = 50
+        self.chilly_bird.rect.y = round(SCREEN_HEIGHT / 2)
+        self.score = 0
+
+    def process_input(self):
+        raise NotImplementedError
+        if pg.mouse.get_pressed()[1]:
+            # Stops the music if mouse wheel is pressed with the 1 second delay
+            pg.mixer.music.fadeout(1000)
+        if pg.mouse.get_pressed()[2]:
+            # Unmutes the music if right mouse button is pressed
+            pg.mixer.music.play(-1)
+
+        for event in pg.event.get():
+            if event.type == l.QUIT:
+                self.running = False
+
+            if (
+                event.type == pg.MOUSEBUTTONDOWN
+                and not self.flying
+                and not game_is_over
+            ):
+                self.flying = True
+
+    def update_state(self):
+        raise NotImplementedError
+
+    def render(self):
         raise NotImplementedError
 
     def run(self):
+        self.running = True
+        while self.running:
+            self.process_input()
+            self.update_state()
+            self.render()
+            self.clock.tick(self.fps)
         raise NotImplementedError
 
 
@@ -43,15 +151,6 @@ font1 = pg.font.Font("game_files/arcadeclassic.ttf", 30)  # For displaying the s
 font2 = pg.font.Font("game_files/arcadeclassic.ttf", 18)  # For instructing a player
 
 """Loading the images"""
-
-
-@dataclass
-class MainSceneAssets:
-    bg_img: Path
-    road_texture: Path
-    restart_button_img: Path
-    disappointed_girl_img: Path
-    bg_music: Path
 
 
 background = pg.image.load(
@@ -85,54 +184,56 @@ def reset_game():  # Returns everything to its pre-launched position
     return score
 
 
-class Bird(pg.sprite.Sprite):
-    def __init__(self, x, y):
-        pg.sprite.Sprite.__init__(self)  # Constructor for the sprite class
-        self.images = [
-            pg.image.load(f"game_files/bird/bird{num}.png")
-            for num in range(1, 4)  # Creates the bird animation
-        ]
-        self.i = 0  # Index of the image in the self.images list
-        self.anim_spd = 0  # Speed at which the animation runs
-        self.image = self.images[self.i]
-        self.rect = self.image.get_rect(center=(x, y))
-        self.gravity = 0
-        self.clicked = False
+# class Bird(pg.sprite.Sprite):
+#     def __init__(self, x, y):
+#         pg.sprite.Sprite.__init__(self)  # Constructor for the sprite class
+#         self.images = [
+#             pg.image.load(f"game_files/bird/bird{num}.png")
+#             for num in range(1, 4)  # Creates the bird animation
+#         ]
+#         self.i = 0  # Index of the image in the self.images list
+#         self.anim_spd = 0  # Speed at which the animation runs
+#         self.image = self.images[self.i]
+#         self.rect = self.image.get_rect(center=(x, y))
+#         self.jump_sound = pg.mixer.Sound("./assets/sound/jump_sound.mp3")
+#         self.gravity = 0
+#         self.clicked = False
 
-    def update(self):
-        if is_flying:
-            """Creating the force that constantly pulls the bird down (essentially gravity)"""
-            self.gravity += 0.17
-            self.gravity = min(self.gravity, 2.6)
-            if self.rect.bottom < 384:
-                self.rect.y += int(self.gravity)
+#     def update(self):
+#         if is_flying:
+#             """Creating the force that constantly pulls the bird down (essentially gravity)"""
+#             self.gravity += 0.17
+#             self.gravity = min(self.gravity, 2.6)
+#             if self.rect.bottom < 384:
+#                 self.rect.y += int(self.gravity)
 
-        if not game_is_over:
-            """Creating the bird's ability to jump"""
-            if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
-                self.clicked = True
-                self.gravity = -3.5
-            if not pg.mouse.get_pressed()[0] == 1:
-                self.clicked = False
+#         if not game_is_over:
+#             """Creating the bird's ability to jump"""
+#             if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
+#                 self.clicked = True
+#                 self.gravity = -3.5
+#                 self.jump_sound.play()
+#             if not pg.mouse.get_pressed()[0] == 1:
+#                 self.clicked = False
 
-            """Flapping animation"""
-            self.anim_spd += 1
-            anim_spd_limit = (
-                5  # The greater this value, the slower the bird flaps its wings
-            )
-            if self.anim_spd > anim_spd_limit:
-                self.anim_spd = 0  # Otherwise the speed of the wings flapping would be indefinitely increasing
-                self.i += 1
-                if self.i >= len(self.images):
-                    self.i = 0  # In order to create an endless loop of animation and the bird would not stop flapping its wings right after the first iteration of the list
-            self.image = pg.transform.rotate(
-                self.images[self.i], self.gravity * -1.25
-            )  # Improving the animation of jumping
-        else:
-            self.image = pg.transform.rotate(
-                self.images[self.i], -75
-            )  # Animaton of the bird falling
-            self.gravity = 10
+#             """Flapping animation"""
+#             self.anim_spd += 1
+#             anim_spd_limit = (
+#                 5  # The greater this value, the slower the bird flaps its wings
+#             )
+#             if self.anim_spd > anim_spd_limit:
+#                 self.anim_spd = 0  # Otherwise the speed of the wings flapping would be indefinitely increasing
+#                 self.i += 1
+#                 if self.i >= len(self.images):
+#                     self.i = 0  # In order to create an endless loop of animation and the bird would not stop flapping its wings right after the first iteration of the list
+#             self.image = pg.transform.rotate(
+#                 self.images[self.i], self.gravity * -1.25
+#             )  # Improving the animation of jumping
+#         else:
+#             self.image = pg.transform.rotate(
+#                 self.images[self.i], -75
+#             )  # Animaton of the bird falling
+#             self.gravity = 10
 
 
 class Pipe(pg.sprite.Sprite):
