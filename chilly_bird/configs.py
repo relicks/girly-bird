@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from loguru import logger
 from omegaconf import MISSING, OmegaConf
 
 
@@ -12,7 +13,7 @@ class AssetsConf:
     sound_path: Path = MISSING
 
 
-@dataclass(frozen=True)
+@dataclass
 class Window:
     fps: int = 60
     screen_width: int = 432
@@ -49,8 +50,11 @@ class MainConfig:
 
 
 def load_config(path: str = "./conf/config.yaml") -> MainConfig:
+    r_path = Path(path).resolve()
+    logger.info("Loading config from {}", r_path)
+
     conf_s: MainConfig = OmegaConf.structured(MainConfig)
-    conf_f = OmegaConf.load("./conf/config.yaml")
+    conf_f = OmegaConf.load(r_path)
     conf: MainConfig = OmegaConf.merge(conf_s, conf_f)  # type: ignore
     return conf
 

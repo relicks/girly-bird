@@ -1,4 +1,6 @@
-pygame>=2.5.0
+pygame==2.5.*
+pygame-widgets==1.1.*
 omegaconf
+loguru
 ipykernel
 typing_extensions
