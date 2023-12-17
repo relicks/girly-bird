@@ -201,7 +201,7 @@ class Game:
         self.leftmost_pipe = pg.time.get_ticks() - self.pipe_freq
 
         self.bird = Bird(50, self.screen_height / 2)
-        self.bird_group = pg.sprite.Group()
+        self.bird_group = pg.sprite.GroupSingle()
         self.bird_group.add(self.bird)
 
         logger.info("Game instance initialized")
@@ -318,9 +318,10 @@ class Game:
         )
 
         # ? Collision handling
-        bird_collided_pipe = pg.sprite.groupcollide(
-            self.bird_group, self.pipe_group, False, False
-        )
+        # bird_collided_pipe = pg.sprite.groupcollide(
+        #     self.bird_group, self.pipe_group, False, False
+        # )
+        bird_collided_pipe = pg.sprite.spritecollideany(self.bird, self.pipe_group)
         bird_touched_screen_top = self.bird.rect.top < 0
         if bird_collided_pipe or bird_touched_screen_top:
             self.game_is_over = True
@@ -388,11 +389,13 @@ class Game:
         frame_count = 1
         while self.running:
             logger.trace("-> Frame {} begins", frame_count)
+
             self.display.blit(self.background, (0, 0))
             self.process_input()
             # self.update_state()
             self.render()
             self.clock.tick(self.fps)
+
             logger.trace("-> Frame {} ends", frame_count)
             frame_count += 1
         pg.quit()
