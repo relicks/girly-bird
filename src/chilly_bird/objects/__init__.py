@@ -82,7 +82,7 @@ class Pipe(pg.sprite.Sprite):
 
         self.counter = 0
         self.div = 10
-        self.step = 0.501
+        self.step = 1
 
         if location == 1:  # Pipe pointing up
             # ? +35 pixels in order to create a gap
@@ -145,12 +145,6 @@ class GameState:
         raise NotImplementedError
 
 
-# """Setting the game's parameters (values)"""
-# SPEED_SCROLL = 2
-# PIPE_FREQ = 1250  # New pipes appear every 1.25 seconds
-# GAP_BTW_PIPES = 100
-
-
 class Game:
     def __init__(self, screen_width, screen_height) -> None:
         self.screen_width = screen_width
@@ -179,14 +173,14 @@ class Game:
 
         # ? Loading images
         # convert() enables faster blitting -> improves performance
-        self.background = pg.image.load("game_files/background.png").convert()
+        self.background = pg.image.load("game_files/background_2.png").convert()
 
         self.road_img = pg.image.load("game_files/road.png").convert()
         self.restart_button_img = pg.image.load(
             "game_files/restart.button.png"
         ).convert()
         self.disappointed_girl_img = pg.image.load(
-            "game_files/disappointed.girl.png"
+            "game_files/disappointed.girl_2.png"
         ).convert_alpha()  # transparent background
 
         # ? Init params
@@ -392,7 +386,7 @@ class Game:
             ):
                 self.bird.flying = True
 
-        # pg.display.update()
+        # pg.display.update() # ? Unnecessary
         pg.display.flip()  # update the contents of the entire display
 
     def run(self):

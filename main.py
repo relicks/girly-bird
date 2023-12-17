@@ -6,7 +6,7 @@ from chilly_bird.objects import Game
 
 
 def main():
-    configure_logger(logger, print_stdout=True)
+    configure_logger(logger, level="DEBUG", print_stdout=True)
     cfg = load_config()
 
     logger.info("Initializing Game")
