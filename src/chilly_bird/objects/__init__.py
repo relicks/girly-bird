@@ -1,8 +1,6 @@
 # flake8: noqa: PLR0912, PLR0913, PLR2004
 
-
 import random
-from abc import ABC, abstractmethod
 
 import pygame as pg
 import pygame.locals as l
@@ -11,26 +9,6 @@ from pygame import mixer
 
 from .bird import Bird
 from .pipes import Pipe
-
-
-class BaseState(ABC):
-    def __init__(self):
-        self.done = False
-        self.next_state = None
-        self.screen_rect = pg.display.get_surface().get_rect()
-        self.cache = {}
-
-    @abstractmethod
-    def handle_event(self, event: pg.event.Event):
-        pass
-
-    @abstractmethod
-    def update(self, dt: int):
-        pass
-
-    @abstractmethod
-    def draw(self, surface: pg.Surface):
-        pass
 
 
 class RestartButton:

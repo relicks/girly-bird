@@ -1,0 +1,13 @@
+version: '3'
+
+interval: 500ms
+
+tasks:
+  watch:
+    aliases: [w]
+    desc: Watches .FILE
+    watch: true
+    sources:
+      - '**/*.py'
+    cmds:
+      - python {{.FILE}}

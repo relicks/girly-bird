@@ -3,6 +3,7 @@
         "blit",
         "blitting",
         "pygame",
+        "thorpy",
         "unmute",
         "Unmutes"
     ]
