@@ -1,3 +1,8 @@
 .idea/
 venv/
 .venv/
+logs/
+build/
+__pycache__
+.pdm-python
+.python-version
