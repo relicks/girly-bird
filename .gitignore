@@ -9,6 +9,8 @@ __pycache__
 .python-version
 =======
 src/*.egg-info
+build/
+
 .pdm-python
 .python-version
 __pycache__

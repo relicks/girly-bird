@@ -2,120 +2,39 @@
 
 
 import random
+from abc import ABC, abstractmethod
 
 import pygame as pg
 import pygame.locals as l
 from loguru import logger
 from pygame import mixer
 
-
-class Bird(pg.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        # ? Creates the bird animation frames:
-        self.images = [
-            pg.image.load(f"game_files/bird/bird{num}.png") for num in range(1, 4)
-        ]
-        self.i = 0  # Index of the image in the self.images list
-        self.anim_spd = 0  # Speed at which the animation runs
-        self.image = self.images[self.i]
-        self.rect = self.image.get_rect(center=(x, y))
-        self.jump_sound = pg.mixer.Sound("./assets/sound/jump_sound.mp3")
-        self.gravity = 0
-        self.clicked = False
-        self.flying = False
-        self.visible = True
-        logger.info("Bird initialized")
-
-    def update(self):
-        logger.trace("Bird updating")
-        if self.flying:
-            logger.trace("Bird is flying down")
-            # Creating the force that constantly pulls
-            # the bird down (essentially gravity)
-            self.gravity += 0.17
-            self.gravity = min(self.gravity, 2.6)
-            if self.rect.bottom < 384:
-                self.rect.y += int(self.gravity)
-
-        if self.visible:
-            """Creating the bird's ability to jump"""
-            if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
-                logger.trace("Fly key pressed")
-                self.clicked = True
-                self.gravity = -3.5
-                self.jump_sound.play()
-            if not pg.mouse.get_pressed()[0] == 1:
-                self.clicked = False
-
-            """Flapping animation"""
-            self.anim_spd += 1
-            anim_spd_limit = 5  # flapping animation speed
-            if self.anim_spd > anim_spd_limit:
-                # Otherwise the speed of the wings flapping
-                # would be indefinitely increasing
-                self.anim_spd = 0
-                self.i += 1
-                if self.i >= len(self.images):
-                    # In order to create an endless loop of animation and
-                    # the bird would not stop flapping its wings right after
-                    # the first iteration of the list
-                    self.i = 0
-            # Improving the animation of jumping:
-            self.image = pg.transform.rotate(self.images[self.i], self.gravity * -1.25)
-        else:
-            # Animaton of the bird falling:
-            self.image = pg.transform.rotate(self.images[self.i], -75)
-            self.gravity = 10
-
-    def hidden(self, b: bool):
-        self.visible = b
+from .bird import Bird
+from .pipes import Pipe
 
 
-class Pipe(pg.sprite.Sprite):
-    def __init__(self, x: int, y: int, location: int, pipe_gap: int, scroll_speed: int):
-        super().__init__()
-        self.image = pg.image.load("game_files/pipe.png")
-        self.rect = self.image.get_rect()
-        self.pipe_gap = pipe_gap
-        self.scroll_speed = scroll_speed
+class BaseState(ABC):
+    def __init__(self):
+        self.done = False
+        self.next_state = None
+        self.screen_rect = pg.display.get_surface().get_rect()
+        self.cache = {}
 
-        self.counter = 0
-        self.div = 10
-        self.step = 1
+    @abstractmethod
+    def handle_event(self, event: pg.event.Event):
+        pass
 
-        if location == 1:  # Pipe pointing up
-            # ? +35 pixels in order to create a gap
-            self.rect.topleft = (x, round(y + self.pipe_gap / 2))
-        if location == -1:  # Pipe pointing down
-            # Fliping not by the x-axis (False), but by the y-axis (True)
-            self.image = pg.transform.flip(self.image, False, True)
-            # ? -35 pixels in order to create a gap (70 pixels overall)
-            self.rect.bottomleft = (x, round(y - self.pipe_gap / 2))
-        logger.trace("Pipe initialized at ({}, {}), loc={}", x, y, location)
+    @abstractmethod
+    def update(self, dt: int):
+        pass
 
-    def update(self):
-        logger.trace("Pipe updating")
-        self.rect.x -= self.scroll_speed  # Forces pipes to constantly move to the left
-
-        if self.counter >= 0:
-            self.rect.y -= self.step
-            if self.counter >= self.div:
-                self.counter -= 2 * self.div
-        else:
-            self.rect.y += self.step
-        self.counter += self.step
-
-        if self.rect.right < 0:
-            logger.debug("Pipe moved out of screen, killing it")
-            # As soon as the rightmost point of a pipe disappears
-            # from the screen, it is deleted. Otherwise disappeared
-            # pipes remain in the game memory
-            self.kill()
+    @abstractmethod
+    def draw(self, surface: pg.Surface):
+        pass
 
 
 class RestartButton:
-    def __init__(self, x, y, image):
+    def __init__(self, x: int, y: int, image: pg.Surface):
         self.image = image
         self.rect = self.image.get_rect(topleft=(x, y))
 
@@ -131,7 +50,7 @@ class RestartButton:
 
 
 class Girl:
-    def __init__(self, x, y, image):
+    def __init__(self, x: int, y: int, image: pg.Surface):
         self.image = image
         self.rect = self.image.get_rect(topleft=(x, y))
 
@@ -216,7 +135,7 @@ class Game:
         mixer.music.load("game_files/game.music.mp3")
         pg.mixer.music.play(-1)  # Infinite music loop
 
-    def draw_text(self, text, font, text_col, x, y):
+    def draw_text(self, text: str, font: pg.font.Font, text_col, x, y):
         """Instructs a player and displays score."""
         image = font.render(text, True, text_col)
         self.display.blit(image, (x, y))
