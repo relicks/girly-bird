@@ -1,3 +1,5 @@
+from typing import Any
+
 import pygame as pg
 from loguru import logger
 
@@ -13,24 +15,36 @@ class Bird(pg.sprite.Sprite):
         self.i = 0  # Index of the image in the self.images list
         self.anim_spd = 0  # Speed at which the animation runs
         self.image = self.images[self.i]
-        self.rect = self.image.get_rect(center=(x, y))
+        # self.rect = self.image.get_rect(center=(x, y))
+        self.initial_pos = (x, y)
+        self.position(self.initial_pos)
         self.jump_sound = pg.mixer.Sound("./assets/sound/jump_sound.mp3")
         self.gravity = 0
         self.clicked = False
         self.flying = False
         self.visible = True
+        self.road_y_pos = 384
         logger.info("Bird initialized")
 
-    def update(self):
+    def reset(self):
+        self.position(self.initial_pos)
+        self.i = 0  # Index of the image in the self.images list
+        self.anim_spd = 0  # Speed at which the animation runs
+        self.image = self.images[self.i]
+        self.gravity = 0
+        self.clicked = False
+        self.flying = False
+        self.visible = True
+
+    def position(self, pos: tuple[int, int] | None = None):
+        if pos is None:
+            pos = self.initial_pos
+        self.rect = self.image.get_rect(center=pos)
+
+    def update(self, *args: Any, **kwargs: Any) -> None:
         logger.trace("Bird updating")
         if self.flying:
-            logger.trace("Bird is flying down")
-            # Creating the force that constantly pulls
-            # the bird down (essentially gravity)
-            self.gravity += 0.17
-            self.gravity = min(self.gravity, 2.6)
-            if self.rect.bottom < 384:
-                self.rect.y += int(self.gravity)
+            self.fly()
 
         if self.visible:
             """Creating the bird's ability to jump"""
@@ -61,6 +75,15 @@ class Bird(pg.sprite.Sprite):
             # Animaton of the bird falling:
             self.image = pg.transform.rotate(self.images[self.i], -75)
             self.gravity = 10
+
+    def fly(self) -> None:
+        logger.trace("Bird is flying down")
+        # Creating the force that constantly pulls
+        # the bird down (essentially gravity)
+        self.gravity += 0.17
+        self.gravity = min(self.gravity, 2.6)
+        if self.rect.bottom < self.road_y_pos:
+            self.rect.y += int(self.gravity)
 
     def hidden(self, b: bool):
         self.visible = b

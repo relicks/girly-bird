@@ -12,7 +12,7 @@ cfg = load_config()
 states = {
     "Start": StartScreen(cfg, "Flying"),
     "Flying": Flying(cfg, "GameOver"),
-    "GameOver": GameOver(cfg, "Flying"),
+    "GameOver": GameOver(cfg, "Start"),
 }
 
 game = Game(screen, states, "Start", cfg)

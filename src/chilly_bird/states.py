@@ -9,6 +9,8 @@ from pygame.sprite import AbstractGroup
 
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
+from chilly_bird.objects.buttons import BUTTON_PRESSED, RestartButton
+from chilly_bird.objects.girls import Girl
 from chilly_bird.objects.pipes import Pipe
 from chilly_bird.objects.road import Road
 from chilly_bird.objects.textboxes import TextSprite
@@ -136,6 +138,7 @@ class Flying(BaseState):
 
         bird_group: pg.sprite.GroupSingle[Bird] = passed_groups["bird"]  # type: ignore
         bird_group.sprite.flying = True
+        bird_group.sprite.position()
         self.groups.update({"bird": bird_group, "road": passed_groups["road"]})
 
     def update(self, dt: int) -> None:
@@ -237,6 +240,37 @@ class GameOver(BaseState):
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
         super().__init__(cfg, next_state)
+        if cfg is None:
+            raise ValueError("cfg argument can't be None")
+
+        self.groups.update(
+            {
+                "girl": pg.sprite.GroupSingle(
+                    Girl(
+                        x=140,
+                        y=200,
+                        image=pg.image.load(
+                            cfg.main_scene.disappointed_girl_img
+                        ).convert_alpha(),
+                    )
+                ),
+                "restart_button": pg.sprite.GroupSingle(
+                    RestartButton(
+                        x=self.screen_rect.width // 2 - 40,
+                        y=self.screen_rect.height // 2 - 80,
+                        image=pg.image.load(
+                            cfg.main_scene.restart_button_img
+                        ).convert_alpha(),
+                    )
+                ),
+            }
+        )
 
     def on_enter(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
-        return super().on_enter(passed_groups)
+        carry_over = ["bird", "pipes", "road", "score"]
+        for group_name in carry_over:
+            self.groups[group_name] = passed_groups[group_name]
+
+    def handle_event(self, event: Event) -> None:
+        if event.type == BUTTON_PRESSED and event.button == "restart":
+            self.done = True
