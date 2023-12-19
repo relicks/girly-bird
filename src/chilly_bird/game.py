@@ -5,7 +5,7 @@ import pygame.locals as l
 from loguru import logger
 
 from chilly_bird.configs import MainConfig
-from chilly_bird.states import BaseState
+from chilly_bird.states import BaseState, Flying
 
 
 class Background:
@@ -31,7 +31,7 @@ class Game:
         self.current_state: BaseState = self.states[start_state]
 
         self.background = pg.image.load(cfg.main_scene.bg_img).convert()
-        # self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
+        self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
 
         pg.mixer.music.load(cfg.main_scene.bg_music)
         pg.mixer.music.play(-1)  # Infinite music loop
@@ -71,6 +71,10 @@ class Game:
     def draw(self):
         self.screen.blit(self.background, (0, 0))
         self.current_state.draw(self.screen)
+
+        # road scrolling ugly fix 🤦‍♀️
+        if isinstance(self.current_state, Flying):
+            self.screen.blit(self.road_img, (self.current_state.road_scroll, 384))
 
     def run(self):
         while self.running:
