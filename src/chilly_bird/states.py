@@ -141,6 +141,7 @@ class Flying(BaseState):
         bird_group: pg.sprite.GroupSingle[Bird] = passed_groups["bird"]  # type: ignore
         bird_group.sprite.flying = True
         self.groups.update({"bird": bird_group, "road": passed_groups["road"]})
+        self.groups["pipes"].update(scroll_speed=self.scroll_speed)
 
     def update(self, dt: int) -> None:
         current_score = self.inc_score()
@@ -271,6 +272,16 @@ class GameOver(BaseState):
         carry_over = ["bird", "pipes", "road", "score"]
         for group_name in carry_over:
             self.groups[group_name] = passed_groups[group_name]
+        self.groups["pipes"].update(scroll_speed=0)
+
+        # ? swapping girl sprite to the end, so it would be drawn on the front
+        girl = self.groups["girl"]
+        del self.groups["girl"]
+        self.groups["girl"] = girl
+
+        restart_button = self.groups["restart_button"]
+        del self.groups["restart_button"]
+        self.groups["restart_button"] = restart_button
 
     def on_exit(self) -> dict[str, AbstractGroup]:
         self.groups["bird"].sprites()[0].reset()

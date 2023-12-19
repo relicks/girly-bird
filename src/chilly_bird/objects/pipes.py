@@ -1,3 +1,6 @@
+# flake8: noqa: PLR0913
+from typing import Any
+
 import pygame as pg
 from loguru import logger
 
@@ -26,8 +29,15 @@ class Pipe(pg.sprite.Sprite):
             self.rect.bottomleft = (x, round(y - self.pipe_gap / 2))
         logger.trace("Pipe initialized at ({}, {}), loc={}", x, y, location)
 
-    def update(self):
+    def update(self, *args: Any, **kwargs: Any) -> None:
         logger.trace("Pipe updating")
+        new_scroll_speed = kwargs.get("scroll_speed")
+        if new_scroll_speed is not None:
+            self.scroll_speed = new_scroll_speed
+
+        if self.scroll_speed == 0:
+            return
+
         self.rect.x -= self.scroll_speed  # Forces pipes to constantly move to the left
 
         if self.counter >= 0:
