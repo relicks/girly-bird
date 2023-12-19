@@ -1,0 +1,20 @@
+{
+    "files.exclude": {
+        // -------- PROJECT DIRECTORIES --------
+        "**/.git/": true,
+        "**/*.egg-info/": true,
+        ".venv/": true,
+        "build/": true,
+        ".task/": true,
+        // ------- PROJECT FILES -------
+        "LICENSE": true,
+        "README.md": true,
+        ".pdm-python": true,
+        ".python-version": true,
+        "**/__pycache__": true,
+    },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "pyproject.toml": ".gitignore, requirements.txt, pdm.lock, cspell.json, Taskfile.yml",
+    },
+}
