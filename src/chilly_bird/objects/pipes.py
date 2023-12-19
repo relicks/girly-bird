@@ -6,7 +6,7 @@ class Pipe(pg.sprite.Sprite):
     def __init__(self, x: int, y: int, location: int, pipe_gap: int, scroll_speed: int):
         super().__init__()
 
-        self.image = pg.image.load("game_files/pipe.png")
+        self.image = pg.image.load("game_files/pipe.png").convert_alpha()
         self.rect = self.image.get_rect()
 
         self.pipe_gap = pipe_gap

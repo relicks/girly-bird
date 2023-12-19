@@ -31,7 +31,7 @@ class Game:
         self.current_state: BaseState = self.states[start_state]
 
         self.background = pg.image.load(cfg.main_scene.bg_img).convert()
-        self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
+        # self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
 
         pg.mixer.music.load(cfg.main_scene.bg_music)
         pg.mixer.music.play(-1)  # Infinite music loop

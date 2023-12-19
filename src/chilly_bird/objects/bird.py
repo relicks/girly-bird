@@ -7,7 +7,8 @@ class Bird(pg.sprite.Sprite):
         super().__init__()
         # ? Creates the bird animation frames:
         self.images = [
-            pg.image.load(f"game_files/bird/bird{num}.png") for num in range(1, 4)
+            pg.image.load(f"game_files/bird/bird{num}.png").convert_alpha()
+            for num in range(1, 4)
         ]
         self.i = 0  # Index of the image in the self.images list
         self.anim_spd = 0  # Speed at which the animation runs

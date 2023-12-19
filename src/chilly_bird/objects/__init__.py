@@ -185,19 +185,18 @@ class Game:
 
         # Counting player's score
         if len(self.pipe_group) > 0:  # Some pipes had been created
-            if (
+            # The leftmost point of the bird has passed the leftmost point of a pipe
+            leftmost_passed = (
                 self.bird_group.sprites()[0].rect.left
-                > self.pipe_group.sprites()[
-                    0
-                ].rect.left  # The leftmost point of the bird has passed
-                # the leftmost point of a pipe
-                and self.bird_group.sprites()[0].rect.right
-                < self.pipe_group.sprites()[
-                    0
-                ].rect.right  # But the bird's rightmost point has not passed
-                # the rightmost point of the pipe
-                and not self.within_pipe
-            ):
+                > self.pipe_group.sprites()[0].rect.left
+            )
+            # But the bird's rightmost point has not passed
+            # the rightmost point of the pipe
+            rightmost_not_passed = (
+                self.bird_group.sprites()[0].rect.right
+                < self.pipe_group.sprites()[0].rect.right
+            )
+            if leftmost_passed and rightmost_not_passed and not self.within_pipe:
                 # The bird is within the range of the leftmost
                 # and rightmost points of the pipe
                 self.within_pipe = True
