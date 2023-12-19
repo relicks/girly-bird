@@ -136,9 +136,10 @@ class Flying(BaseState):
         self.game_is_over = False
         self.road_scroll = 0
 
+        self.groups["pipes"].empty()
+
         bird_group: pg.sprite.GroupSingle[Bird] = passed_groups["bird"]  # type: ignore
         bird_group.sprite.flying = True
-        bird_group.sprite.position()
         self.groups.update({"bird": bird_group, "road": passed_groups["road"]})
 
     def update(self, dt: int) -> None:
@@ -270,6 +271,12 @@ class GameOver(BaseState):
         carry_over = ["bird", "pipes", "road", "score"]
         for group_name in carry_over:
             self.groups[group_name] = passed_groups[group_name]
+
+    def on_exit(self) -> dict[str, AbstractGroup]:
+        self.groups["bird"].sprites()[0].reset()
+        self.groups["pipes"].empty()
+        # self.groups["score"].update(text="0")
+        return super().on_exit()
 
     def handle_event(self, event: Event) -> None:
         if event.type == BUTTON_PRESSED and event.button == "restart":

@@ -12,25 +12,19 @@ class Bird(pg.sprite.Sprite):
             pg.image.load(f"game_files/bird/bird{num}.png").convert_alpha()
             for num in range(1, 4)
         ]
-        self.i = 0  # Index of the image in the self.images list
-        self.anim_spd = 0  # Speed at which the animation runs
-        self.image = self.images[self.i]
-        # self.rect = self.image.get_rect(center=(x, y))
-        self.initial_pos = (x, y)
-        self.position(self.initial_pos)
         self.jump_sound = pg.mixer.Sound("./assets/sound/jump_sound.mp3")
-        self.gravity = 0
-        self.clicked = False
-        self.flying = False
-        self.visible = True
         self.road_y_pos = 384
+        self.initial_pos = (x, y)
+
+        self.reset()
+
         logger.info("Bird initialized")
 
     def reset(self):
-        self.position(self.initial_pos)
         self.i = 0  # Index of the image in the self.images list
         self.anim_spd = 0  # Speed at which the animation runs
         self.image = self.images[self.i]
+        self.position(self.initial_pos)
         self.gravity = 0
         self.clicked = False
         self.flying = False

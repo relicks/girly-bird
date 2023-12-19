@@ -46,13 +46,19 @@ class Game:
     def flip_state(self):
         # current_state = self.state_name
         if (next_state := self.current_state.next_state) is not None:
+            logger.info(
+                "Flipping from `{}` to `{}` state",
+                self.current_state.__class__,
+                next_state,
+            )
             self.current_state.done = False
 
             persistent = self.current_state.on_exit()
+            logger.debug("Passing groups `{}` to `{}` state", persistent, next_state)
             self.current_state = self.states[next_state]
             self.current_state.on_enter(persistent)
         else:
-            logger.warning(
+            logger.critical(
                 "State {} was attempted to flip, while not specifying next state",
                 self.current_state.__class__,
             )

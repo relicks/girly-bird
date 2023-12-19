@@ -39,7 +39,7 @@ class Pipe(pg.sprite.Sprite):
         self.counter += self.step
 
         if self.rect.right < 0:
-            logger.debug("Pipe moved out of screen, killing it")
+            logger.trace("Pipe moved out of screen, killing it")
             # As soon as the rightmost point of a pipe disappears
             # from the screen, it is deleted. Otherwise disappeared
             # pipes remain in the game memory

@@ -15,12 +15,15 @@ class TextSprite(pg.sprite.Sprite):
     ):
         super().__init__()
         self.font = font
-        self.initial_text = initial_text
+        self.previous_text = None
+        self.current_text = initial_text
         self.color = color
-        self.image = self.font.render(self.initial_text, True, self.color)
+        self.image = self.font.render(initial_text, True, self.color)
         self.rect = self.image.get_rect(topleft=pos)
 
     def update(self, *args: Any, **kwargs: Any) -> None:
         new_text = kwargs.get("text")
-        if new_text is not None and new_text != self.initial_text:
+        if new_text is not None and new_text != self.previous_text:
+            self.previous_text = self.current_text
+            self.current_text = new_text
             self.image = self.font.render(new_text, True, self.color)
