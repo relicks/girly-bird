@@ -9,9 +9,13 @@ from chilly_bird.states import Flying, GameOver, StartScreen
 pg.init()
 screen = pg.display.set_mode((432, 468))
 cfg = load_config()
-states = {"Start": StartScreen(cfg), "Flying": Flying(cfg), "GameOver": GameOver(cfg)}
+states = {
+    "Start": StartScreen(cfg, "Flying"),
+    "Flying": Flying(cfg, "GameOver"),
+    "GameOver": GameOver(cfg, "Flying"),
+}
 
-game = Game(screen, states, "Start")
+game = Game(screen, states, "Start", cfg)
 game.run()
 
 pg.quit()

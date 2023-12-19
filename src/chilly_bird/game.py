@@ -16,7 +16,11 @@ class Background:
 
 class Game:
     def __init__(
-        self, screen: pg.Surface, states: Mapping[str, BaseState], start_state
+        self,
+        screen: pg.Surface,
+        states: Mapping[str, BaseState],
+        start_state: str,
+        cfg: MainConfig,
     ):
         self.running = True
         self.screen = screen
@@ -24,9 +28,12 @@ class Game:
         self.fps = 60
         self.states = states
         # self.state_name = start_state
-        self.current_state = self.states[start_state]
+        self.current_state: BaseState = self.states[start_state]
 
-        pg.mixer.music.load("game_files/game.music.mp3")
+        self.background = pg.image.load(cfg.main_scene.bg_img).convert()
+        self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
+
+        pg.mixer.music.load(cfg.main_scene.bg_music)
         pg.mixer.music.play(-1)  # Infinite music loop
 
     def handle_events(self):
@@ -41,9 +48,9 @@ class Game:
         if (next_state := self.current_state.next_state) is not None:
             self.current_state.done = False
 
-            persistent = self.current_state.persist()
-            self.current_state = next_state
-            self.current_state.boot(persistent)
+            persistent = self.current_state.on_exit()
+            self.current_state = self.states[next_state]
+            self.current_state.on_enter(persistent)
         else:
             logger.warning(
                 "State {} was attempted to flip, while not specifying next state",
@@ -56,6 +63,7 @@ class Game:
         self.current_state.update(dt)
 
     def draw(self):
+        self.screen.blit(self.background, (0, 0))
         self.current_state.draw(self.screen)
 
     def run(self):

@@ -2,11 +2,9 @@ from abc import ABC, abstractmethod
 from collections.abc import Mapping
 
 import pygame as pg
-import pygame.locals as l
 from loguru import logger
 from pygame.event import Event
 from pygame.sprite import AbstractGroup
-from typing_extensions import Self
 
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
@@ -14,9 +12,11 @@ from chilly_bird.objects.textboxes import TextSprite
 
 
 class BaseState(ABC):
-    def __init__(self, cfg: MainConfig | None = None) -> None:
+    def __init__(
+        self, cfg: MainConfig | None = None, next_state: str | None = None
+    ) -> None:
         self.done = False
-        self.next_state: Self | None = None
+        self.next_state = next_state
         self.screen_rect = pg.display.get_surface().get_rect()
         self.groups: dict[str, pg.sprite.AbstractGroup] = {}
 
@@ -32,16 +32,16 @@ class BaseState(ABC):
             group.draw(surface)
 
     @abstractmethod
-    def boot(self, passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None:
+    def on_enter(self, passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None:
         pass
 
-    def persist(self) -> dict[str, pg.sprite.AbstractGroup]:
+    def on_exit(self) -> dict[str, pg.sprite.AbstractGroup]:
         return self.groups
 
 
 class StartScreen(BaseState):
-    def __init__(self, cfg: MainConfig | None = None):
-        super().__init__(cfg)
+    def __init__(self, cfg: MainConfig | None = None, next_state: str | None = None):
+        super().__init__(cfg, next_state)
         if cfg is None:
             raise ValueError("cfg argument can't be None")
         self.bird = Bird(50, self.screen_rect.height / 2)
@@ -74,8 +74,8 @@ class StartScreen(BaseState):
             }
         )
 
-    def boot(self, passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None:
-        return super().boot(passed_groups)
+    def on_enter(self, passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None:
+        return super().on_enter(passed_groups)
 
     def handle_event(self, event: Event) -> None:
         if event.type == pg.constants.MOUSEBUTTONDOWN:
@@ -90,36 +90,28 @@ class StartScreen(BaseState):
                     logger.trace("RMB pressed")
                     # Unmutes the music if right mouse button is pressed
                     pg.mixer.music.play(-1)
-        # if pg.mouse.get_pressed()[1]:
-        #     logger.trace("MMB pressed")
-        #     # Stops the music if mouse wheel is pressed with the 1 second delay
-        #     pg.mixer.music.fadeout(1000)
-        # if pg.mouse.get_pressed()[2]:
-        #     logger.trace("RMB pressed")
-        #     # Unmutes the music if right mouse button is pressed
-        #     pg.mixer.music.play(-1)
-
-    # def persist(self) -> dict[str, pg.sprite.GroupSingle]:
-    #     # self.groups["bird"].empty()
-    #     return {"bird": self.groups["bird"]}  # type: ignore
 
 
 class Flying(BaseState):
-    def __init__(self, cfg: MainConfig | None = None) -> None:
-        super().__init__(cfg)
+    def __init__(
+        self, cfg: MainConfig | None = None, next_state: str | None = None
+    ) -> None:
+        super().__init__(cfg, next_state)
         if cfg is None:
             raise ValueError("cfg argument can't be None")
 
-    def boot(self, passed_groups: dict[str, AbstractGroup]) -> None:
-        self.groups.update(passed_groups)
+    def on_enter(self, passed_groups: dict[str, AbstractGroup]) -> None:
+        self.groups.update({"bird": passed_groups["bird"]})
 
-    def persist(self):
+    def on_exit(self):
         return self.groups
 
 
 class GameOver(BaseState):
-    def __init__(self, cfg: MainConfig | None = None) -> None:
-        super().__init__(cfg)
+    def __init__(
+        self, cfg: MainConfig | None = None, next_state: str | None = None
+    ) -> None:
+        super().__init__(cfg, next_state)
 
-    def boot(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
-        return super().boot(passed_groups)
+    def on_enter(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
+        return super().on_enter(passed_groups)
