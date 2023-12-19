@@ -88,14 +88,6 @@ class StartScreen(BaseState):
             match event.button:
                 case 1:  # LMB
                     self.done = True
-                case 2:  # MMB
-                    logger.trace("MMB pressed")
-                    # Stops the music if mouse wheel is pressed with the 1 second delay
-                    pg.mixer.music.fadeout(1000)
-                case 3:
-                    logger.trace("RMB pressed")
-                    # Unmutes the music if right mouse button is pressed
-                    pg.mixer.music.play(-1)
 
 
 class Flying(BaseState):

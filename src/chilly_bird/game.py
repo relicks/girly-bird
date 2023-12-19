@@ -41,6 +41,18 @@ class Game:
             if event.type == l.QUIT:
                 logger.info("Close button was pressed")
                 self.running = False
+
+            if event.type == pg.constants.MOUSEBUTTONDOWN:
+                match event.button:
+                    case 2:  # MMB
+                        logger.trace("MMB pressed")
+                        # Stops the music if mouse wheel is pressed with the 1 second delay
+                        pg.mixer.music.fadeout(1000)
+                    case 3:
+                        logger.trace("RMB pressed")
+                        # Unmutes the music if right mouse button is pressed
+                        pg.mixer.music.play(-1)
+
             self.current_state.handle_event(event)
 
     def flip_state(self):
