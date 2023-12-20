@@ -36,6 +36,7 @@ class Fonts:
 class MainSceneAssets:
     bird_aframes: tuple[Path, Path, Path] = MISSING
     bird_jump_sound: Path = MISSING
+    bird_size: tuple[int, int] = (50, 35)
     bg_img: Path = MISSING
     bg_music: Path = MISSING
     road_texture: Path = MISSING

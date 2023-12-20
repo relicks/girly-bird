@@ -10,9 +10,13 @@ class Bird(pg.sprite.Sprite):
     def __init__(self, x, y, cfg: MainConfig):
         super().__init__()
         # ? Creates the bird animation frames:
-        self.images = [
+        animation_frames = [
             pg.image.load(frame).convert_alpha()
             for frame in cfg.main_scene.bird_aframes
+        ]
+        self.scale = cfg.main_scene.bird_size
+        self.images = [
+            pg.transform.scale(frame, self.scale) for frame in animation_frames
         ]
         self.jump_sound = pg.mixer.Sound(cfg.main_scene.bird_jump_sound)
         self.road_y_pos = 384

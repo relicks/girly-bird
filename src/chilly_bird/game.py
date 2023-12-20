@@ -5,7 +5,8 @@ import pygame.locals as l
 from loguru import logger
 
 from chilly_bird.configs import MainConfig
-from chilly_bird.states import BaseState, Flying
+from chilly_bird.states import Flying
+from chilly_bird.states.base import BaseState
 
 
 class Background:
@@ -46,7 +47,8 @@ class Game:
                 match event.button:
                     case 2:  # MMB
                         logger.trace("MMB pressed")
-                        # Stops the music if mouse wheel is pressed with the 1 second delay
+                        # Stops the music if mouse wheel is pressed
+                        # with the 1 second delay
                         pg.mixer.music.fadeout(1000)
                     case 3:
                         logger.trace("RMB pressed")

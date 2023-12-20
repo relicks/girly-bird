@@ -1,0 +1,70 @@
+from collections.abc import Mapping
+
+import pygame as pg
+from pygame.event import Event
+from pygame.sprite import AbstractGroup
+
+from chilly_bird.configs import MainConfig
+from chilly_bird.objects.buttons import (
+    RestartButton,
+    consts,
+)
+from chilly_bird.objects.girls import Girl
+from chilly_bird.states.base import BaseState
+
+
+class GameOver(BaseState):
+    def __init__(
+        self, cfg: MainConfig | None = None, next_state: str | None = None
+    ) -> None:
+        super().__init__(cfg, next_state)
+        if cfg is None:
+            raise ValueError("cfg argument can't be None")
+
+        self.groups.update(
+            {
+                "girl": pg.sprite.GroupSingle(
+                    Girl(
+                        x=140,
+                        y=200,
+                        image=pg.image.load(
+                            cfg.main_scene.disappointed_girl_img
+                        ).convert_alpha(),
+                    )
+                ),
+                "restart_button": pg.sprite.GroupSingle(
+                    RestartButton(
+                        x=self.screen_rect.width // 2 - 40,
+                        y=self.screen_rect.height // 2 - 80,
+                        image=pg.image.load(
+                            cfg.main_scene.restart_button_img
+                        ).convert_alpha(),
+                    )
+                ),
+            }
+        )
+
+    def on_enter(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
+        carry_over = ["bird", "pipes", "road", "score"]
+        for group_name in carry_over:
+            self.groups[group_name] = passed_groups[group_name]
+        self.groups["pipes"].update(scroll_speed=0)
+
+        # ? swapping girl sprite to the end, so it would be drawn on the front
+        girl = self.groups["girl"]
+        del self.groups["girl"]
+        self.groups["girl"] = girl
+
+        restart_button = self.groups["restart_button"]
+        del self.groups["restart_button"]
+        self.groups["restart_button"] = restart_button
+
+    def on_exit(self) -> dict[str, AbstractGroup]:
+        self.groups["bird"].sprites()[0].reset()
+        self.groups["pipes"].empty()
+        # self.groups["score"].update(text="0")
+        return super().on_exit()
+
+    def handle_event(self, event: Event) -> None:
+        if event.type == consts.CUSTOM_BUTTON_PRESSED and event.button == "restart":
+            self.done = True

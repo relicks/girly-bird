@@ -25,6 +25,9 @@ main_scene:
   - ${assets.frames_path}/bird/bird2.png
   - ${assets.frames_path}/bird/bird3.png
   bird_jump_sound: ${assets.sound_path}/jump_sound.mp3
+  bird_size:
+  - 50
+  - 35
   bg_img:  ${assets.img_path}/backgrounds/background_2.png
   road_texture:  ${assets.img_path}/objects/road.png
   pipe_img: ${assets.img_path}/objects/pipe.png
