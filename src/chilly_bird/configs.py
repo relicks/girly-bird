@@ -44,6 +44,7 @@ class MainSceneAssets:
     start_button_img: Path = MISSING
     restart_button_img: Path = MISSING
     reskin_button_img: Path = MISSING
+    redress_button_img: Path = MISSING
     disappointed_girl_img: Path = MISSING
 
 

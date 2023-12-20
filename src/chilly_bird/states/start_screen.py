@@ -8,6 +8,7 @@ from chilly_bird import utils
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
 from chilly_bird.objects.buttons import (
+    RedressButton,
     ReskinButton,
     StartButton,
     consts,
@@ -64,6 +65,15 @@ class StartScreen(BaseState):
                         ).convert_alpha(),
                     )
                 ),
+                "redress_button": pg.sprite.GroupSingle(
+                    RedressButton(
+                        x=self.screen_rect.width // 4 - 40,
+                        y=self.screen_rect.height - 40,
+                        image=pg.image.load(
+                            cfg.main_scene.redress_button_img
+                        ).convert_alpha(),
+                    )
+                ),
             }
         )
 
@@ -79,7 +89,9 @@ class StartScreen(BaseState):
                     case "reskin":
                         logger.info("Reskin button pressed")
                         self.reskin_bird()
-                        pass
+                    case "redress":
+                        logger.info("Redress button pressed")
+                        self.groups["bird"].sprites()[0].redress()
             case _:
                 pass
 

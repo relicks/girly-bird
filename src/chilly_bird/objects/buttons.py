@@ -1,4 +1,5 @@
 import types
+from abc import ABC, abstractmethod
 from typing import Any
 
 import pygame as pg
@@ -10,7 +11,7 @@ consts = types.SimpleNamespace()
 consts.CUSTOM_BUTTON_PRESSED = pg.event.custom_type()
 
 
-class StartButton(pg.sprite.Sprite):
+class BaseButton(ABC, pg.sprite.Sprite):
     def __init__(self, x: int, y: int, image: pg.Surface):
         super().__init__()
         self.image = image
@@ -21,35 +22,32 @@ class StartButton(pg.sprite.Sprite):
         if self.rect.collidepoint(pos):
             if pg.mouse.get_pressed()[0] == 1:
                 pg.event.post(
-                    pg.event.Event(consts.CUSTOM_BUTTON_PRESSED, {"button": "start"})
+                    pg.event.Event(
+                        consts.CUSTOM_BUTTON_PRESSED,
+                        {"button": self.button_event_name()},
+                    )
                 )
 
-
-class RestartButton(pg.sprite.Sprite):
-    def __init__(self, x: int, y: int, image: pg.Surface):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
-
-    def update(self, *args: Any, **kwargs: Any) -> None:
-        pos = pg.mouse.get_pos()
-        if self.rect.collidepoint(pos):
-            if pg.mouse.get_pressed()[0] == 1:
-                pg.event.post(
-                    pg.event.Event(consts.CUSTOM_BUTTON_PRESSED, {"button": "restart"})
-                )
+    @abstractmethod
+    def button_event_name(self) -> str:
+        pass
 
 
-class ReskinButton(pg.sprite.Sprite):
-    def __init__(self, x: int, y: int, image: pg.Surface):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
+class StartButton(BaseButton):
+    def button_event_name(self) -> str:
+        return "start"
 
-    def update(self, *args: Any, **kwargs: Any) -> None:
-        pos = pg.mouse.get_pos()
-        if self.rect.collidepoint(pos):
-            if pg.mouse.get_pressed()[0] == 1:
-                pg.event.post(
-                    pg.event.Event(consts.CUSTOM_BUTTON_PRESSED, {"button": "reskin"})
-                )
+
+class RestartButton(BaseButton):
+    def button_event_name(self) -> str:
+        return "restart"
+
+
+class ReskinButton(BaseButton):
+    def button_event_name(self) -> str:
+        return "reskin"
+
+
+class RedressButton(BaseButton):
+    def button_event_name(self) -> str:
+        return "redress"

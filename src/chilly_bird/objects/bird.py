@@ -18,6 +18,7 @@ class Bird(pg.sprite.Sprite):
         self.images = [
             pg.transform.scale(frame, self.scale) for frame in animation_frames
         ]
+        self.initial_images = self.images[:]  # shallow copy
         self.jump_sound = pg.mixer.Sound(cfg.main_scene.bird_jump_sound)
         self.road_y_pos = 384
         self.initial_pos = (x, y)
@@ -86,5 +87,8 @@ class Bird(pg.sprite.Sprite):
         if self.rect.bottom < self.road_y_pos:
             self.rect.y += int(self.gravity)
 
-    def hidden(self, b: bool):
-        self.visible = b
+    # def hidden(self, b: bool):
+    #     self.visible = b
+
+    def redress(self):
+        self.images = self.initial_images[:]  # shallow copy
