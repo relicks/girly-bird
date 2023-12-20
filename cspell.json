@@ -2,6 +2,7 @@
     "words": [
         "blit",
         "blitting",
+        "consts",
         "pygame",
         "thorpy",
         "unmute",

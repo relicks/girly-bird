@@ -8,8 +8,10 @@
     клик правой клавишей - удалить круг)
  - сгенерировать картинки из исходной (клавиша "save")
 """
-import pygame as pg
 from tkinter import filedialog
+
+import pygame as pg
+
 
 def create_rect(point1, point2):
     x1, y1 = point1
@@ -20,22 +22,27 @@ def create_rect(point1, point2):
     h = max(y1, y2) - top
     return pg.Rect(left, top, w, h)
 
+
 class CircleNode:
     def __init__(self, point1, point2):
         self.rect = create_rect(point1, point2)
 
+
 def get_graphic_filename():
-    return filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")])
+    return filedialog.askopenfilename(
+        filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")]
+    )
+
 
 class GraphEditor:
     def __init__(self):
-        self.open_key = pg.K_o          # открыть - буква "o"
-        self.save_key = pg.K_s          # сохранить - буква "s"
-        self.FPS = 24                   # частота обновления
+        self.open_key = pg.K_o  # открыть - буква "o"
+        self.save_key = pg.K_s  # сохранить - буква "s"
+        self.FPS = 24  # частота обновления
         self.circle_color = (0, 0, 0)
         self.curr_color = (200, 0, 0)
         self.min_circle_size = 10
-        self.width, self.height = 800, 600        # размеры окна
+        self.width, self.height = 800, 600  # размеры окна
         self.back_image = None
         self.circles = []
         self.curr_start = None

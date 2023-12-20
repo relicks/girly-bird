@@ -9,7 +9,12 @@ from pygame.sprite import AbstractGroup
 
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
-from chilly_bird.objects.buttons import BUTTON_PRESSED, RestartButton
+from chilly_bird.objects.buttons import (
+    ReskinButton,
+    RestartButton,
+    StartButton,
+    consts,
+)
 from chilly_bird.objects.girls import Girl
 from chilly_bird.objects.pipes import Pipe
 from chilly_bird.objects.road import Road
@@ -53,12 +58,12 @@ class StartScreen(BaseState):
         self.font = pg.font.Font(cfg.fonts.text_font, cfg.fonts.text_font_size)
         self.font_color = (235, 221, 190)
         self.texts = [
-            TextSprite(
-                "    ".join("press left mouse button to start the game".split()),
-                font=self.font,
-                color=self.font_color,
-                pos=(20, 275),
-            ),
+            # TextSprite(
+            #     "    ".join("press left mouse button to start the game".split()),
+            #     font=self.font,
+            #     color=self.font_color,
+            #     pos=(20, 275),
+            # ),
             TextSprite(
                 "    ".join("press mouse wheel to mute the music".split()),
                 font=self.font,
@@ -75,8 +80,28 @@ class StartScreen(BaseState):
         self.groups.update(
             {
                 "text": pg.sprite.Group(*self.texts),
-                "bird": pg.sprite.GroupSingle(Bird(50, self.screen_rect.height / 2)),
+                "bird": pg.sprite.GroupSingle(
+                    Bird(50, self.screen_rect.height / 2, cfg)
+                ),
                 "road": pg.sprite.GroupSingle(Road(cfg)),
+                "start_button": pg.sprite.GroupSingle(
+                    StartButton(
+                        x=self.screen_rect.width // 2 - 40,
+                        y=self.screen_rect.height // 2 + 25,
+                        image=pg.image.load(
+                            cfg.main_scene.start_button_img
+                        ).convert_alpha(),
+                    )
+                ),
+                "reskin_button": pg.sprite.GroupSingle(
+                    ReskinButton(
+                        x=self.screen_rect.width // 2 - 40,
+                        y=self.screen_rect.height - 40,
+                        image=pg.image.load(
+                            cfg.main_scene.reskin_button_img
+                        ).convert_alpha(),
+                    )
+                ),
             }
         )
 
@@ -84,10 +109,23 @@ class StartScreen(BaseState):
         return super().on_enter(passed_groups)
 
     def handle_event(self, event: Event) -> None:
-        if event.type == pg.constants.MOUSEBUTTONDOWN:
-            match event.button:
-                case 1:  # LMB
-                    self.done = True
+        match event.type:
+            case consts.CUSTOM_BUTTON_PRESSED:
+                match event.button:
+                    case "start":
+                        self.done = True
+                    case "reskin":
+                        logger.info("Reskin button pressed")
+                        self.reskin_bird()
+                        pass
+            case _:
+                pass
+
+    def reskin_bird(self):
+        path = "./assets/img/objects/crapped_bird.png"
+        bird: Bird = self.groups["bird"].sprites()[0]
+        new_image = pg.image.load(path)
+        bird.images = [new_image] * 3
 
 
 class Flying(BaseState):
@@ -97,7 +135,7 @@ class Flying(BaseState):
         super().__init__(cfg, next_state)
         if cfg is None:
             raise ValueError("cfg argument can't be None")
-
+        self.cfg = cfg
         # ? Init params
         self.score = 0
         self.game_is_over = False
@@ -188,7 +226,8 @@ class Flying(BaseState):
             self.done = True
             bird.visible = False
 
-        if bird.rect.bottom >= 384:
+        floor_level = 384
+        if bird.rect.bottom >= floor_level:
             self.game_is_over = True
             self.done = True
             bird.flying = False
@@ -211,6 +250,7 @@ class Flying(BaseState):
                     1,
                     self.gap_btw_pipes,
                     self.scroll_speed,
+                    self.cfg,
                 )
                 pipe_up = Pipe(
                     self.screen_rect.width,
@@ -218,6 +258,7 @@ class Flying(BaseState):
                     -1,
                     self.gap_btw_pipes,
                     self.scroll_speed,
+                    self.cfg,
                 )
                 pipe_group.add([pipe_down, pipe_up])
                 self.leftmost_pipe = current_time
@@ -282,5 +323,5 @@ class GameOver(BaseState):
         return super().on_exit()
 
     def handle_event(self, event: Event) -> None:
-        if event.type == BUTTON_PRESSED and event.button == "restart":
+        if event.type == consts.CUSTOM_BUTTON_PRESSED and event.button == "restart":
             self.done = True

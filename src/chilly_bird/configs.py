@@ -9,6 +9,7 @@ from omegaconf import MISSING, OmegaConf
 class AssetsConf:
     _path: Path = MISSING
     fonts_path: Path = MISSING
+    frames_path: Path = MISSING
     img_path: Path = MISSING
     sound_path: Path = MISSING
 
@@ -33,12 +34,16 @@ class Fonts:
 
 @dataclass
 class MainSceneAssets:
+    bird_aframes: tuple[Path, Path, Path] = MISSING
+    bird_jump_sound: Path = MISSING
     bg_img: Path = MISSING
+    bg_music: Path = MISSING
     road_texture: Path = MISSING
     pipe_img: Path = MISSING
+    start_button_img: Path = MISSING
     restart_button_img: Path = MISSING
+    reskin_button_img: Path = MISSING
     disappointed_girl_img: Path = MISSING
-    bg_music: Path = MISSING
 
 
 @dataclass

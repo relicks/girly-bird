@@ -4,12 +4,22 @@ from typing import Any
 import pygame as pg
 from loguru import logger
 
+from chilly_bird.configs import MainConfig
+
 
 class Pipe(pg.sprite.Sprite):
-    def __init__(self, x: int, y: int, location: int, pipe_gap: int, scroll_speed: int):
+    def __init__(
+        self,
+        x: int,
+        y: int,
+        location: int,
+        pipe_gap: int,
+        scroll_speed: int,
+        cfg: MainConfig,
+    ):
         super().__init__()
 
-        self.image = pg.image.load("game_files/pipe.png").convert_alpha()
+        self.image = pg.image.load(cfg.main_scene.pipe_img).convert_alpha()
         self.rect = self.image.get_rect()
 
         self.pipe_gap = pipe_gap

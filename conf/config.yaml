@@ -1,5 +1,6 @@
 assets:
   _path: ./assets/
+  frames_path: ${._path}/frames
   fonts_path: ${._path}/fonts
   img_path: ${._path}/img
   sound_path: ${._path}/sound
@@ -19,9 +20,16 @@ fonts:
   text_font: ${assets.fonts_path}/arcadeclassic.ttf
   text_font_size: 18
 main_scene:
-  bg_img:  ${assets.img_path}/backgrounds/background.png
+  bird_aframes:
+  - ${assets.frames_path}/bird/bird1.png
+  - ${assets.frames_path}/bird/bird2.png
+  - ${assets.frames_path}/bird/bird3.png
+  bird_jump_sound: ${assets.sound_path}/jump_sound.mp3
+  bg_img:  ${assets.img_path}/backgrounds/background_2.png
   road_texture:  ${assets.img_path}/objects/road.png
   pipe_img: ${assets.img_path}/objects/pipe.png
+  start_button_img:  ${assets.img_path}/objects/start.button.png
   restart_button_img:  ${assets.img_path}/objects/restart.button.png
+  reskin_button_img:  ${assets.img_path}/objects/reskin.button.png
   disappointed_girl_img:  ${assets.img_path}/objects/disappointed.girl.png
   bg_music:  ${assets.sound_path}/game.music.mp3

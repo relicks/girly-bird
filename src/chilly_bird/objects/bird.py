@@ -3,16 +3,18 @@ from typing import Any
 import pygame as pg
 from loguru import logger
 
+from chilly_bird.configs import MainConfig
+
 
 class Bird(pg.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, cfg: MainConfig):
         super().__init__()
         # ? Creates the bird animation frames:
         self.images = [
-            pg.image.load(f"game_files/bird/bird{num}.png").convert_alpha()
-            for num in range(1, 4)
+            pg.image.load(frame).convert_alpha()
+            for frame in cfg.main_scene.bird_aframes
         ]
-        self.jump_sound = pg.mixer.Sound("./assets/sound/jump_sound.mp3")
+        self.jump_sound = pg.mixer.Sound(cfg.main_scene.bird_jump_sound)
         self.road_y_pos = 384
         self.initial_pos = (x, y)
 
@@ -41,16 +43,17 @@ class Bird(pg.sprite.Sprite):
             self.fly()
 
         if self.visible:
-            """Creating the bird's ability to jump"""
-            if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
-                logger.trace("Fly key pressed")
-                self.clicked = True
-                self.gravity = -3.5
-                self.jump_sound.play()
-            if not pg.mouse.get_pressed()[0] == 1:
-                self.clicked = False
+            if self.flying:
+                # ? Creating the bird's ability to jump
+                if pg.mouse.get_pressed()[0] == 1 and not self.clicked:
+                    logger.trace("Fly key pressed")
+                    self.clicked = True
+                    self.gravity = -3.5
+                    self.jump_sound.play()
+                if not pg.mouse.get_pressed()[0] == 1:
+                    self.clicked = False
 
-            """Flapping animation"""
+            # ? Flapping animation
             self.anim_spd += 1
             anim_spd_limit = 5  # flapping animation speed
             if self.anim_spd > anim_spd_limit:
