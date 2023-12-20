@@ -25,8 +25,8 @@ class GameOver(BaseState):
             {
                 "girl": pg.sprite.GroupSingle(
                     Girl(
-                        x=140,
-                        y=200,
+                        x=120,
+                        y=240,
                         image=pg.image.load(
                             cfg.main_scene.disappointed_girl_img
                         ).convert_alpha(),

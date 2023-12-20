@@ -5,7 +5,7 @@
 groups = ["default", "test", "jupyter", "lint"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:a5cd074827fd5f91193ffb22b17de8e80645f3090f0c8e629a35bcb68494c464"
+content_hash = "sha256:cb423d68ae83e94f7c6678a06f4db0af5bc573a8cecb3f5ba7d6b32a501ca1fb"
 
 [[package]]
 name = "aiohttp"
@@ -769,20 +769,6 @@ files = [
     {file = "pygame-2.5.2-pp39-pypy39_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:68c4e8e60b725ffc7a6c6ecd9bb5fcc5ed2d6e0e2a2c4a29a8454856ef16ad63"},
     {file = "pygame-2.5.2-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1f3849f97372a3381c66955f99a0d58485ccd513c3d00c030b869094ce6997a6"},
     {file = "pygame-2.5.2.tar.gz", hash = "sha256:c1b89eb5d539e7ac5cf75513125fb5f2f0a2d918b1fd6e981f23bf0ac1b1c24a"},
-]
-
-[[package]]
-name = "pygame-widgets"
-version = "1.1.4"
-requires_python = ">=3.10"
-summary = "Widgets for use with Pygame"
-groups = ["default"]
-dependencies = [
-    "pygame>=2.0.0",
-]
-files = [
-    {file = "pygame-widgets-1.1.4.tar.gz", hash = "sha256:8de8ac9a11585629e7d742f95c9701c906b27c19f49c62be4f4c4773f560d982"},
-    {file = "pygame_widgets-1.1.4-py3-none-any.whl", hash = "sha256:e47970fd66155c73be7eb14f87011fe9f3083d277ab32535fad1a327a1c59a5d"},
 ]
 
 [[package]]

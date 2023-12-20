@@ -3,8 +3,8 @@ from collections.abc import Mapping
 import pygame as pg
 from loguru import logger
 from pygame.event import Event
-from chilly_bird import utils
 
+from chilly_bird import utils
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
 from chilly_bird.objects.buttons import (

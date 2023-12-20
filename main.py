@@ -11,6 +11,8 @@ from chilly_bird.states import Flying, GameOver, StartScreen
 pg.init()
 screen = pg.display.set_mode((432, 468))
 cfg = load_config()
+pg.display.set_caption(cfg.window.caption)
+pg.display.set_icon(pg.image.load(cfg.window.icon_path))
 configure_logger(logger, print_stdout=True)
 states = {
     "Start": StartScreen(cfg, "Flying"),
