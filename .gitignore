@@ -9,3 +9,4 @@ build/
 .pdm-python
 .python-version
 __pycache__
+.ruff_cache

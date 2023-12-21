@@ -5,10 +5,7 @@ from pygame.event import Event
 from pygame.sprite import AbstractGroup
 
 from chilly_bird.configs import MainConfig
-from chilly_bird.objects.buttons import (
-    RestartButton,
-    consts,
-)
+from chilly_bird.objects.buttons import BaseButton, consts
 from chilly_bird.objects.girls import Girl
 from chilly_bird.states.base import BaseState
 
@@ -33,12 +30,13 @@ class GameOver(BaseState):
                     )
                 ),
                 "restart_button": pg.sprite.GroupSingle(
-                    RestartButton(
+                    BaseButton(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height // 2 - 80,
                         image=pg.image.load(
                             cfg.main_scene.restart_button_img
                         ).convert_alpha(),
+                        button_event_name="restart",
                     )
                 ),
             }

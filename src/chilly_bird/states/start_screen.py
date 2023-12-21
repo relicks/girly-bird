@@ -7,12 +7,7 @@ from pygame.event import Event
 from chilly_bird import utils
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
-from chilly_bird.objects.buttons import (
-    RedressButton,
-    ReskinButton,
-    StartButton,
-    consts,
-)
+from chilly_bird.objects.buttons import BaseButton, consts
 from chilly_bird.objects.road import Road
 from chilly_bird.objects.textboxes import TextSprite
 from chilly_bird.states.base import BaseState
@@ -48,26 +43,29 @@ class StartScreen(BaseState):
                 ),
                 "road": pg.sprite.GroupSingle(Road(cfg)),
                 "buttons": pg.sprite.Group(
-                    StartButton(
+                    BaseButton(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height // 2 + 25,
                         image=pg.image.load(
                             cfg.main_scene.start_button_img
                         ).convert_alpha(),
+                        button_event_name="start",
                     ),
-                    ReskinButton(
+                    BaseButton(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height - 40,
                         image=pg.image.load(
                             cfg.main_scene.reskin_button_img
                         ).convert_alpha(),
+                        button_event_name="reskin",
                     ),
-                    RedressButton(
+                    BaseButton(
                         x=self.screen_rect.width // 4 - 40,
                         y=self.screen_rect.height - 40,
                         image=pg.image.load(
                             cfg.main_scene.redress_button_img
                         ).convert_alpha(),
+                        button_event_name="redress",
                     ),
                 ),
             }

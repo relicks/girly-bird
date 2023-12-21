@@ -1,5 +1,4 @@
 import types
-from abc import ABC, abstractmethod
 from typing import Any
 
 import pygame as pg
@@ -11,11 +10,12 @@ consts = types.SimpleNamespace()
 consts.CUSTOM_BUTTON_PRESSED = pg.event.custom_type()
 
 
-class BaseButton(ABC, pg.sprite.Sprite):
-    def __init__(self, x: int, y: int, image: pg.Surface):
+class BaseButton(pg.sprite.Sprite):
+    def __init__(self, x: int, y: int, image: pg.Surface, button_event_name: str):
         super().__init__()
         self.image = image
         self.rect = self.image.get_rect(topleft=(x, y))
+        self.button_event_name = button_event_name
 
     def update(self, *args: Any, **kwargs: Any) -> None:
         pos = pg.mouse.get_pos()
@@ -24,30 +24,6 @@ class BaseButton(ABC, pg.sprite.Sprite):
                 pg.event.post(
                     pg.event.Event(
                         consts.CUSTOM_BUTTON_PRESSED,
-                        {"button": self.button_event_name()},
+                        {"button": self.button_event_name},
                     )
                 )
-
-    @abstractmethod
-    def button_event_name(self) -> str:
-        pass
-
-
-class StartButton(BaseButton):
-    def button_event_name(self) -> str:
-        return "start"
-
-
-class RestartButton(BaseButton):
-    def button_event_name(self) -> str:
-        return "restart"
-
-
-class ReskinButton(BaseButton):
-    def button_event_name(self) -> str:
-        return "reskin"
-
-
-class RedressButton(BaseButton):
-    def button_event_name(self) -> str:
-        return "redress"
