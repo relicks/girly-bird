@@ -17,7 +17,7 @@ make run # runs the game, if installed in venv
 ### 2. Windows
 
 `make.bat` is converted from `Makefile` and has all the same commands,
-though altered to run on WIndows.
+though altered to run on Windows.
 
 ```bat
 .\make.bat
