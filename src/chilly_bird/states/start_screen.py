@@ -47,32 +47,28 @@ class StartScreen(BaseState):
                     Bird(50, self.screen_rect.height / 2, cfg)
                 ),
                 "road": pg.sprite.GroupSingle(Road(cfg)),
-                "start_button": pg.sprite.GroupSingle(
+                "buttons": pg.sprite.Group(
                     StartButton(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height // 2 + 25,
                         image=pg.image.load(
                             cfg.main_scene.start_button_img
                         ).convert_alpha(),
-                    )
-                ),
-                "reskin_button": pg.sprite.GroupSingle(
+                    ),
                     ReskinButton(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height - 40,
                         image=pg.image.load(
                             cfg.main_scene.reskin_button_img
                         ).convert_alpha(),
-                    )
-                ),
-                "redress_button": pg.sprite.GroupSingle(
+                    ),
                     RedressButton(
                         x=self.screen_rect.width // 4 - 40,
                         y=self.screen_rect.height - 40,
                         image=pg.image.load(
                             cfg.main_scene.redress_button_img
                         ).convert_alpha(),
-                    )
+                    ),
                 ),
             }
         )
