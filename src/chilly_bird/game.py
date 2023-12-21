@@ -9,12 +9,6 @@ from chilly_bird.states import Flying
 from chilly_bird.states.base import BaseState
 
 
-class Background:
-    def __init__(self, cfg: MainConfig) -> None:
-        self.background = pg.image.load(cfg.main_scene.bg_img).convert()
-        self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
-
-
 class Game:
     def __init__(
         self,
@@ -28,7 +22,6 @@ class Game:
         self.clock = pg.time.Clock()
         self.fps = 60
         self.states = states
-        # self.state_name = start_state
         self.current_state: BaseState = self.states[start_state]
 
         self.background = pg.image.load(cfg.main_scene.bg_img).convert()
@@ -86,7 +79,7 @@ class Game:
         self.screen.blit(self.background, (0, 0))
         self.current_state.draw(self.screen)
 
-        # road scrolling ugly fix 🤦‍♀️
+        # road scrolling ugly fix 🤦‍♀️🐈🐈‍⬛
         if isinstance(self.current_state, Flying):
             self.screen.blit(self.road_img, (self.current_state.road_scroll, 384))
 

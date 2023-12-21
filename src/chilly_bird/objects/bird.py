@@ -87,8 +87,5 @@ class Bird(pg.sprite.Sprite):
         if self.rect.bottom < self.road_y_pos:
             self.rect.y += int(self.gravity)
 
-    # def hidden(self, b: bool):
-    #     self.visible = b
-
     def redress(self):
         self.images = self.initial_images[:]  # shallow copy

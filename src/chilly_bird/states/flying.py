@@ -80,32 +80,9 @@ class Flying(BaseState):
             ):
                 self.passed_leftmost_pipe = current_pipe
                 self.score += 1
-            # # The leftmost point of the bird has passed the leftmost point of a pipe
-            # leftmost_passed = bird.rect.left > leftmost_pipe.rect.left
-            # # But the bird's rightmost point has not passed
-            # # the rightmost point of the pipe
-            # rightmost_not_passed = bird.rect.right < leftmost_pipe.rect.right
-            # if leftmost_passed and rightmost_not_passed and not self.within_pipe:
-            #     # The bird is within the range of the leftmost
-            #     # and rightmost points of the pipe
-            #     self.within_pipe = True
-
-            # if self.within_pipe:
-            #     logger.trace("Bird within pipe")
-            #     if bird.rect.left > leftmost_pipe.rect.right:
-            #         # And only if the bird's leftmost point passes the
-            #         # rightmost point of a pipe, one point is added to the score
-            #         self.score += 1
-
-            #         # The bird is not within the range of the extreme
-            #         # points of a particular pipe
-            #         self.within_pipe = False
 
     def handle_collision(self):
         # ? Collision handling
-        # bird_collided_pipe = pg.sprite.groupcollide(
-        #     self.bird_group, self.pipe_group, False, False
-        # )
         bird = self.groups["bird"].sprites()[0]
         pipe_group = self.groups["pipes"]
         bird_collided_pipe = pg.sprite.spritecollideany(bird, pipe_group)

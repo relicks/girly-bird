@@ -8,7 +8,7 @@
         ".task/": true,
         // ------- PROJECT FILES -------
         "LICENSE": true,
-        "README.md": true,
+        // "README.md": true,
         ".pdm-python": true,
         ".python-version": true,
         "**/__pycache__": true,
