@@ -3,7 +3,7 @@
         // -------- PROJECT DIRECTORIES --------
         "**/.git/": true,
         "**/*.egg-info/": true,
-        ".venv/": true,
+        // ".venv/": true,
         "build/": true,
         ".task/": true,
         // ------- PROJECT FILES -------
@@ -12,6 +12,7 @@
         ".pdm-python": true,
         ".python-version": true,
         "**/__pycache__": true,
+        ".ruff_cache/": true,
     },
     "explorer.fileNesting.enabled": true,
     "explorer.fileNesting.patterns": {

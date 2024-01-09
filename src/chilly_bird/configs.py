@@ -56,7 +56,7 @@ class MainConfig:
     main_scene: MainSceneAssets = field(default_factory=lambda: MainSceneAssets())
 
 
-def load_config(path: str = "./conf/config.yaml") -> MainConfig:
+def load_config(path: str) -> MainConfig:
     r_path = Path(path).resolve()
     logger.info("Loading config from {}", r_path)
 
