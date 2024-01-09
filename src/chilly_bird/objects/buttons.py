@@ -13,8 +13,8 @@ consts.CUSTOM_BUTTON_PRESSED = pg.event.custom_type()
 class BaseButton(pg.sprite.Sprite):
     def __init__(self, x: int, y: int, image: pg.Surface, button_event_name: str):
         super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
+        self.image: pg.Surface = image
+        self.rect: pg.Rect = self.image.get_rect(topleft=(x, y))
         self.button_event_name = button_event_name
 
     def update(self, *args: Any, **kwargs: Any) -> None:
