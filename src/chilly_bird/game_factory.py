@@ -1,4 +1,5 @@
 import sys
+from dataclasses import dataclass
 
 import pygame as pg
 from loguru import logger
@@ -7,7 +8,13 @@ from chilly_bird.configs import MainConfig, load_config
 from chilly_bird.game import Game
 from chilly_bird.logging import configure_logger
 from chilly_bird.states import Flying, GameOver, StartScreen
-from chilly_bird.states.base import BaseState
+
+
+@dataclass
+class MainScene:
+    start_screen: StartScreen
+    flying: Flying
+    game_over: GameOver
 
 
 class GameFactory:
@@ -23,18 +30,29 @@ class GameFactory:
         pg.display.set_icon(pg.image.load(self.cfg.window.icon_path))
 
         # Creating game states for State Machine
-        self.states: dict[str, BaseState] = {
-            "Start": StartScreen(self.cfg, "Flying"),
-            "Flying": Flying(self.cfg, "GameOver"),
-            "GameOver": GameOver(self.cfg, "Start"),
-        }
+        self.main_scene = MainScene(
+            StartScreen(self.cfg, "Flying"),
+            Flying(self.cfg, "GameOver"),
+            GameOver(self.cfg, "Start"),
+        )
 
         # Logger's stuff
         configure_logger(logger, print_stdout=True)
 
-    def __enter__(self):
         # Creating game core object
-        return Game(self.screen, self.states, "Start", self.cfg)
+        self.game: Game = Game(
+            screen=self.screen,
+            states={
+                "Start": self.main_scene.start_screen,
+                "Flying": self.main_scene.flying,
+                "GameOver": self.main_scene.game_over,
+            },
+            start_state="Start",
+            cfg=self.cfg,
+        )
+
+    def __enter__(self):
+        return self.game
 
     def __exit__(self, *exc_details):
         pg.quit()

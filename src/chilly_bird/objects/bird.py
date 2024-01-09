@@ -27,17 +27,17 @@ class Bird(pg.sprite.Sprite):
 
         logger.info("Bird initialized")
 
-    def reset(self):
+    def reset(self) -> None:
         self.i = 0  # Index of the image in the self.images list
         self.anim_spd = 0  # Speed at which the animation runs
         self.image = self.images[self.i]
         self.position(self.initial_pos)
-        self.gravity = 0
+        self.gravity = 0.0
         self.clicked = False
         self.flying = False
         self.visible = True
 
-    def position(self, pos: tuple[int, int] | None = None):
+    def position(self, pos: tuple[int, int] | None = None) -> None:
         if pos is None:
             pos = self.initial_pos
         self.rect = self.image.get_rect(center=pos)
@@ -87,5 +87,5 @@ class Bird(pg.sprite.Sprite):
         if self.rect.bottom < self.road_y_pos:
             self.rect.y += int(self.gravity)
 
-    def redress(self):
+    def redress(self) -> None:
         self.images = self.initial_images[:]  # shallow copy

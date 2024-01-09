@@ -15,7 +15,7 @@ class AssetsConf:
 
 
 @dataclass
-class Window:
+class WindowConf:
     fps: int = 60
     screen_width: int = 432
     screen_height: int = 468
@@ -24,7 +24,7 @@ class Window:
 
 
 @dataclass
-class Fonts:
+class FontsConf:
     color: tuple[int, int, int] = (235, 221, 190)
     score_font: Path = MISSING
     score_font_size: int = MISSING
@@ -33,7 +33,7 @@ class Fonts:
 
 
 @dataclass
-class MainSceneAssets:
+class MainSceneAssetsConf:
     bird_aframes: tuple[Path, Path, Path] = MISSING
     bird_jump_sound: Path = MISSING
     bird_size: tuple[int, int] = (50, 35)
@@ -51,9 +51,11 @@ class MainSceneAssets:
 @dataclass
 class MainConfig:
     assets: AssetsConf = field(default_factory=lambda: AssetsConf())
-    window: Window = field(default_factory=lambda: Window())
-    fonts: Fonts = field(default_factory=lambda: Fonts())
-    main_scene: MainSceneAssets = field(default_factory=lambda: MainSceneAssets())
+    window: WindowConf = field(default_factory=lambda: WindowConf())
+    fonts: FontsConf = field(default_factory=lambda: FontsConf())
+    main_scene: MainSceneAssetsConf = field(
+        default_factory=lambda: MainSceneAssetsConf()
+    )
 
 
 def load_config(path: str) -> MainConfig:

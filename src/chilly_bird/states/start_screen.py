@@ -89,7 +89,7 @@ class StartScreen(BaseState):
             case _:
                 pass
 
-    def reskin_bird(self):
+    def reskin_bird(self) -> None:
         bird: Bird = self.groups["bird"].sprites()[0]
         if new_image := utils.open_image(self.cfg.main_scene.bird_size):
             bird.images = [new_image] * 3

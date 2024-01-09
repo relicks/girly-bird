@@ -1,0 +1,72 @@
+@startuml packages
+set namespaceSeparator none
+package "chilly_bird" as chilly_bird {
+}
+package "chilly_bird.configs" as chilly_bird.configs {
+}
+package "chilly_bird.game" as chilly_bird.game {
+}
+package "chilly_bird.game_factory" as chilly_bird.game_factory {
+}
+package "chilly_bird.logging" as chilly_bird.logging {
+}
+package "chilly_bird.objects" as chilly_bird.objects {
+}
+package "chilly_bird.objects.bird" as chilly_bird.objects.bird {
+}
+package "chilly_bird.objects.buttons" as chilly_bird.objects.buttons {
+}
+package "chilly_bird.objects.girls" as chilly_bird.objects.girls {
+}
+package "chilly_bird.objects.pipes" as chilly_bird.objects.pipes {
+}
+package "chilly_bird.objects.road" as chilly_bird.objects.road {
+}
+package "chilly_bird.objects.textboxes" as chilly_bird.objects.textboxes {
+}
+package "chilly_bird.states" as chilly_bird.states {
+}
+package "chilly_bird.states.base" as chilly_bird.states.base {
+}
+package "chilly_bird.states.flying" as chilly_bird.states.flying {
+}
+package "chilly_bird.states.game_over" as chilly_bird.states.game_over {
+}
+package "chilly_bird.states.start_screen" as chilly_bird.states.start_screen {
+}
+package "chilly_bird.utils" as chilly_bird.utils {
+}
+chilly_bird --> chilly_bird.game_factory
+chilly_bird.game --> chilly_bird.configs
+chilly_bird.game --> chilly_bird.states
+chilly_bird.game --> chilly_bird.states.base
+chilly_bird.game_factory --> chilly_bird.configs
+chilly_bird.game_factory --> chilly_bird.game
+chilly_bird.game_factory --> chilly_bird.logging
+chilly_bird.game_factory --> chilly_bird.states
+chilly_bird.game_factory --> chilly_bird.states.base
+chilly_bird.objects.bird --> chilly_bird.configs
+chilly_bird.objects.pipes --> chilly_bird.configs
+chilly_bird.objects.road --> chilly_bird.configs
+chilly_bird.states --> chilly_bird.states.flying
+chilly_bird.states --> chilly_bird.states.game_over
+chilly_bird.states --> chilly_bird.states.start_screen
+chilly_bird.states.base --> chilly_bird.configs
+chilly_bird.states.flying --> chilly_bird.configs
+chilly_bird.states.flying --> chilly_bird.objects.bird
+chilly_bird.states.flying --> chilly_bird.objects.pipes
+chilly_bird.states.flying --> chilly_bird.objects.textboxes
+chilly_bird.states.flying --> chilly_bird.states.base
+chilly_bird.states.game_over --> chilly_bird.configs
+chilly_bird.states.game_over --> chilly_bird.objects.buttons
+chilly_bird.states.game_over --> chilly_bird.objects.girls
+chilly_bird.states.game_over --> chilly_bird.states.base
+chilly_bird.states.start_screen --> chilly_bird
+chilly_bird.states.start_screen --> chilly_bird.configs
+chilly_bird.states.start_screen --> chilly_bird.objects.bird
+chilly_bird.states.start_screen --> chilly_bird.objects.buttons
+chilly_bird.states.start_screen --> chilly_bird.objects.road
+chilly_bird.states.start_screen --> chilly_bird.objects.textboxes
+chilly_bird.states.start_screen --> chilly_bird.states.base
+chilly_bird.states.start_screen --> chilly_bird.utils
+@enduml

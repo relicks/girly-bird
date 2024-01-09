@@ -67,7 +67,7 @@ class Flying(BaseState):
     def draw(self, surface: pg.Surface) -> None:
         return super().draw(surface)
 
-    def on_exit(self):
+    def on_exit(self) -> dict[str, AbstractGroup]:
         return self.groups
 
     def inc_score(self) -> None:
@@ -81,7 +81,7 @@ class Flying(BaseState):
                 self.passed_leftmost_pipe = current_pipe
                 self.score += 1
 
-    def handle_collision(self):
+    def handle_collision(self) -> None:
         # ? Collision handling
         bird = self.groups["bird"].sprites()[0]
         pipe_group = self.groups["pipes"]
@@ -99,7 +99,7 @@ class Flying(BaseState):
             bird.flying = False
             bird.visible = False
 
-    def generate_pipes(self):
+    def generate_pipes(self) -> None:
         bird = self.groups["bird"].sprites()[0]
         pipe_group = self.groups["pipes"]
         if not self.game_is_over and bird.flying:

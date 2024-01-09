@@ -18,19 +18,19 @@ class Game:
         cfg: MainConfig,
     ):
         self.running = True
-        self.screen = screen
+        self.screen: pg.Surface = screen
         self.clock = pg.time.Clock()
         self.fps = 60
         self.states = states
         self.current_state: BaseState = self.states[start_state]
 
-        self.background = pg.image.load(cfg.main_scene.bg_img).convert()
-        self.road_img = pg.image.load(cfg.main_scene.road_texture).convert()
+        self.background: pg.Surface = pg.image.load(cfg.main_scene.bg_img).convert()
+        self.road_img: pg.Surface = pg.image.load(cfg.main_scene.road_texture).convert()
 
         pg.mixer.music.load(cfg.main_scene.bg_music)
         pg.mixer.music.play(-1)  # Infinite music loop
 
-    def handle_events(self):
+    def handle_events(self) -> None:
         for event in pg.event.get():
             if event.type == l.QUIT:
                 logger.info("Close button was pressed")
@@ -50,7 +50,7 @@ class Game:
 
             self.current_state.handle_event(event)
 
-    def flip_state(self):
+    def flip_state(self) -> None:
         # current_state = self.state_name
         if (next_state := self.current_state.next_state) is not None:
             logger.info(
@@ -70,12 +70,12 @@ class Game:
                 self.current_state.__class__,
             )
 
-    def update_state(self, dt):
+    def update_state(self, dt: int) -> None:
         if self.current_state.done:
             self.flip_state()
         self.current_state.update(dt)
 
-    def draw(self):
+    def draw(self) -> None:
         self.screen.blit(self.background, (0, 0))
         self.current_state.draw(self.screen)
 
@@ -83,9 +83,9 @@ class Game:
         if isinstance(self.current_state, Flying):
             self.screen.blit(self.road_img, (self.current_state.road_scroll, 384))
 
-    def run(self):
+    def run(self) -> None:
         while self.running:
-            dt = self.clock.tick(self.fps)
+            dt: int = self.clock.tick(self.fps)
             self.handle_events()
             self.update_state(dt)
             self.draw()

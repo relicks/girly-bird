@@ -1,0 +1,216 @@
+@startuml classes
+set namespaceSeparator none
+class "pg.sprite.Sprite" as pg.sprite.Sprite {
+  + layer : int
+  + add() -> None
+  + add_internal(group: _Group) -> None
+  + alive() -> bool
+  + groups() -> List[_Group]
+  + kill() -> None
+  + remove() -> None
+  + remove_internal(group: _Group) -> None
+  + update() -> None
+}
+' class "AssetsConf" as chilly_bird.configs.AssetsConf {
+'   + fonts_path : Path
+'   + frames_path : Path
+'   + img_path : Path
+'   + sound_path : Path
+' }
+class "BaseButton" as chilly_bird.objects.buttons.BaseButton {
+  + button_event_name : str
+  + image : pg.Surface
+  + rect : pg.Rect
+  + update() -> None
+}
+abstract class "BaseState" as chilly_bird.states.base.BaseState {
+  + done : bool
+  + groups : dict[str, pg.sprite.AbstractGroup]
+  + next_state : str | None
+  + screen_rect : pg.Rect
+  + draw(surface: pg.Surface) -> None
+  + handle_event(event: pg.event.Event) -> None
+  + {abstract}on_enter(passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None
+  + on_exit() -> dict[str, pg.sprite.AbstractGroup]
+  + update(dt: int) -> None
+}
+class "Bird" as chilly_bird.objects.bird.Bird {
+  + anim_spd : int
+  + clicked : bool
+  + flying : bool
+  + gravity : float
+  + i : int
+  + image : pg.Surface
+  + images : list[pg.Surface]
+  + initial_images : list[pg.Surface]
+  + initial_pos : tuple
+  + jump_sound : pg.mixer.Sound
+  + rect : pg.Rect
+  + road_y_pos : int
+  + scale : tuple[int, int]
+  + visible : bool
+  + fly() -> None
+  + position(pos: tuple[int, int] | None) -> None
+  + redress() -> None
+  + reset() -> None
+  + update() -> None
+}
+class "Flying" as chilly_bird.states.flying.Flying {
+  + cfg : MainConfig | None
+  + done : bool
+  + game_is_over : bool
+  + gap_btw_pipes : int
+  + leftmost_pipe : int
+  + passed_leftmost_pipe : NoneType
+  + pipe_freq : int
+  + road_scroll : int
+  + score : int
+  + scroll_speed : int
+  + within_pipe : bool
+  + draw(surface: pg.Surface) -> None
+  + generate_pipes() -> None
+  + handle_collision() -> None
+  + inc_score() -> None
+  + on_enter(passed_groups: dict[str, AbstractGroup]) -> None
+  + on_exit() -> dict[str, AbstractGroup]
+  + update(dt: int) -> None
+}
+' class "FontsConf" as chilly_bird.configs.FontsConf {
+'   + color : tuple[int, int, int]
+'   + score_font : Path
+'   + score_font_size : int
+'   + text_font : Path
+'   + text_font_size : int
+' }
+class "Game" as chilly_bird.game.Game {
+  + background : pg.Surface
+  + clock : pg.time.Clock
+  + current_state : BaseState
+  + fps : int
+  + road_img : pg.Surface
+  + running : bool
+  + screen : pg.Surface
+  + states : Mapping[str, BaseState]
+  + draw() -> None
+  + flip_state() -> None
+  + handle_events() -> None
+  + run() -> None
+  + update_state(dt: int) -> None
+}
+class "GameFactory" as chilly_bird.game_factory.GameFactory {
+  + cfg : MainConfig
+  + game : Game
+  + main_scene : MainScene
+  + screen : pg.Surface
+}
+class "GameOver" as chilly_bird.states.game_over.GameOver {
+  + done : bool
+  + handle_event(event: Event) -> None
+  + on_enter(passed_groups: Mapping[str, AbstractGroup]) -> None
+  + on_exit() -> dict[str, AbstractGroup]
+}
+class "Girl" as chilly_bird.objects.girls.Girl {
+  + image : pg.Surface
+  + rect : pg.Rect
+}
+class "MainConfig" as chilly_bird.configs.MainConfig {
+  + assets : AssetsConf
+  + fonts : WindowConf
+  + main_scene : FontsConf
+  + window : MainSceneAssetsConf
+}
+class "MainScene" as chilly_bird.game_factory.MainScene {
+  + start_screen : StartScreen
+  + flying : Flying
+  + game_over : GameOver
+}
+' class "MainSceneAssetsConf" as chilly_bird.configs.MainSceneAssetsConf {
+'   + bg_img : Path
+'   + bg_music : Path
+'   + bird_aframes : tuple[Path, Path, Path]
+'   + bird_jump_sound : Path
+'   + bird_size : tuple[int, int]
+'   + disappointed_girl_img : Path
+'   + pipe_img : Path
+'   + redress_button_img : Path
+'   + reskin_button_img : Path
+'   + restart_button_img : Path
+'   + road_texture : Path
+'   + start_button_img : Path
+' }
+class "Pipe" as chilly_bird.objects.pipes.Pipe {
+  + counter : int
+  + div : int
+  + image : pg.Surface
+  + pipe_gap : int
+  + rect : pg.Rect
+  + scroll_speed : int
+  + step : int
+  + update() -> None
+}
+class "Road" as chilly_bird.objects.road.Road {
+  + image : pg.Surface
+  + initial_scroll : int
+  + rect : pg.Rect
+  + y_pos : int
+}
+class "StartScreen" as chilly_bird.states.start_screen.StartScreen {
+  + cfg : MainConfig | None
+  + done : bool
+  + font : pg.font.Font
+  + font_color : tuple
+  + texts : list
+  + handle_event(event: Event) -> None
+  + on_enter(passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None
+  + reskin_bird() -> None
+}
+class "TextSprite" as chilly_bird.objects.textboxes.TextSprite {
+  + color : ColorValue
+  + current_text : str
+  + font : pg.font.Font
+  + image : pg.Surface
+  + previous_text : NoneType
+  + rect : pg.Rect
+  + update() -> None
+}
+' class "WindowConf" as chilly_bird.configs.WindowConf {
+'   + caption : str
+'   + fps : int
+'   + icon_path : Path
+'   + screen_height : int
+'   + screen_width : int
+' }
+chilly_bird.objects.pipes.Pipe --|> pg.sprite.Sprite
+chilly_bird.objects.buttons.BaseButton --|> pg.sprite.Sprite
+chilly_bird.objects.bird.Bird --|> pg.sprite.Sprite
+chilly_bird.objects.girls.Girl --|> pg.sprite.Sprite
+chilly_bird.objects.textboxes.TextSprite --|> pg.sprite.Sprite
+chilly_bird.objects.road.Road --|> pg.sprite.Sprite
+
+chilly_bird.states.flying.Flying --|> chilly_bird.states.base.BaseState
+chilly_bird.states.game_over.GameOver --|> chilly_bird.states.base.BaseState
+chilly_bird.states.start_screen.StartScreen --|> chilly_bird.states.base.BaseState
+
+' chilly_bird.configs.AssetsConf --* chilly_bird.configs.MainConfig : assets
+' chilly_bird.configs.FontsConf --* chilly_bird.configs.MainConfig : fonts
+' chilly_bird.configs.MainConfig --* chilly_bird.game_factory.GameFactory : cfg
+' chilly_bird.configs.MainSceneAssetsConf --* chilly_bird.configs.MainConfig : main_scene
+' chilly_bird.configs.WindowConf --* chilly_bird.configs.MainConfig : window
+
+chilly_bird.game.Game --* chilly_bird.game_factory.GameFactory : game
+chilly_bird.game_factory.MainScene --* chilly_bird.game_factory.GameFactory : main_scene
+
+chilly_bird.objects.bird.Bird --* chilly_bird.states.flying.Flying : groups.bird
+chilly_bird.objects.bird.Bird --* chilly_bird.states.start_screen.StartScreen : groups.bird
+chilly_bird.objects.pipes.Pipe --> chilly_bird.states.flying.Flying
+chilly_bird.objects.girls.Girl --> chilly_bird.states.game_over.GameOver
+chilly_bird.objects.textboxes.TextSprite --* chilly_bird.states.flying.Flying : groups.score
+chilly_bird.objects.textboxes.TextSprite --* chilly_bird.states.start_screen.StartScreen : groups.texts
+chilly_bird.objects.buttons.BaseButton --* chilly_bird.states.game_over.GameOver : groups.restart_button
+chilly_bird.objects.buttons.BaseButton --* chilly_bird.states.start_screen.StartScreen : groups.buttons
+
+chilly_bird.states.base.BaseState --* chilly_bird.game.Game : current_state
+chilly_bird.states.flying.Flying --* chilly_bird.game_factory.MainScene : flying
+chilly_bird.states.game_over.GameOver --* chilly_bird.game_factory.MainScene : game_over
+chilly_bird.states.start_screen.StartScreen --* chilly_bird.game_factory.MainScene : start_screen
+@enduml

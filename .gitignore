@@ -3,6 +3,7 @@
 venv/
 .venv/
 logs/
+out/
 src/*.egg-info
 build/
 
