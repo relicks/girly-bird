@@ -193,9 +193,9 @@ chilly_bird.states.start_screen.StartScreen --|> chilly_bird.states.base.BaseSta
 
 ' chilly_bird.configs.AssetsConf --* chilly_bird.configs.MainConfig : assets
 ' chilly_bird.configs.FontsConf --* chilly_bird.configs.MainConfig : fonts
-' chilly_bird.configs.MainConfig --* chilly_bird.game_factory.GameFactory : cfg
 ' chilly_bird.configs.MainSceneAssetsConf --* chilly_bird.configs.MainConfig : main_scene
 ' chilly_bird.configs.WindowConf --* chilly_bird.configs.MainConfig : window
+chilly_bird.configs.MainConfig --* chilly_bird.game_factory.GameFactory : cfg
 
 chilly_bird.game.Game --* chilly_bird.game_factory.GameFactory : game
 chilly_bird.game_factory.MainScene --* chilly_bird.game_factory.GameFactory : main_scene
