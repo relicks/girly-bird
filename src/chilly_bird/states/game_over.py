@@ -60,7 +60,6 @@ class GameOver(BaseState):
     def on_exit(self) -> dict[str, AbstractGroup]:
         self.groups["bird"].sprites()[0].reset()
         self.groups["pipes"].empty()
-        # self.groups["score"].update(text="0")
         return super().on_exit()
 
     def handle_event(self, event: Event) -> None:

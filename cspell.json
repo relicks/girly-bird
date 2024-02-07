@@ -3,7 +3,9 @@
         "blit",
         "blitting",
         "consts",
+        "ellipsify",
         "pygame",
+        "SRCALPHA",
         "thorpy",
         "unmute",
         "Unmutes"

@@ -1,5 +1,9 @@
 @startuml classes
-set namespaceSeparator none
+' set namespaceSeparator none
+
+' package chilly_bird.objects #DDDDDD {}
+skinparam PackageBackgroundColor #DDDDDD
+
 class "pg.sprite.Sprite" as pg.sprite.Sprite {
   + layer : int
   + add() -> None
@@ -180,16 +184,16 @@ class "TextSprite" as chilly_bird.objects.textboxes.TextSprite {
 '   + screen_height : int
 '   + screen_width : int
 ' }
-chilly_bird.objects.pipes.Pipe --|> pg.sprite.Sprite
-chilly_bird.objects.buttons.BaseButton --|> pg.sprite.Sprite
-chilly_bird.objects.bird.Bird --|> pg.sprite.Sprite
-chilly_bird.objects.girls.Girl --|> pg.sprite.Sprite
-chilly_bird.objects.textboxes.TextSprite --|> pg.sprite.Sprite
-chilly_bird.objects.road.Road --|> pg.sprite.Sprite
+chilly_bird.objects.pipes.Pipe -u-|> pg.sprite.Sprite #line:green;line.dotted;
+chilly_bird.objects.buttons.BaseButton -u-|> pg.sprite.Sprite #line:green;line.dotted;
+chilly_bird.objects.bird.Bird -u-|> pg.sprite.Sprite #line:green;line.dotted;
+chilly_bird.objects.girls.Girl -u-|> pg.sprite.Sprite #line:green;line.dotted;
+chilly_bird.objects.textboxes.TextSprite -u-|> pg.sprite.Sprite #line:green;line.dotted;
+chilly_bird.objects.road.Road -u-|> pg.sprite.Sprite #line:green;line.dotted;
 
-chilly_bird.states.flying.Flying --|> chilly_bird.states.base.BaseState
-chilly_bird.states.game_over.GameOver --|> chilly_bird.states.base.BaseState
-chilly_bird.states.start_screen.StartScreen --|> chilly_bird.states.base.BaseState
+chilly_bird.states.flying.Flying -[#blue]-|> chilly_bird.states.base.BaseState
+chilly_bird.states.game_over.GameOver -[#blue]-|> chilly_bird.states.base.BaseState
+chilly_bird.states.start_screen.StartScreen -[#blue]-|> chilly_bird.states.base.BaseState
 
 ' chilly_bird.configs.AssetsConf --* chilly_bird.configs.MainConfig : assets
 ' chilly_bird.configs.FontsConf --* chilly_bird.configs.MainConfig : fonts
@@ -200,14 +204,14 @@ chilly_bird.configs.MainConfig --* chilly_bird.game_factory.GameFactory : cfg
 chilly_bird.game.Game --* chilly_bird.game_factory.GameFactory : game
 chilly_bird.game_factory.MainScene --* chilly_bird.game_factory.GameFactory : main_scene
 
-chilly_bird.objects.bird.Bird --* chilly_bird.states.flying.Flying : groups.bird
-chilly_bird.objects.bird.Bird --* chilly_bird.states.start_screen.StartScreen : groups.bird
-chilly_bird.objects.pipes.Pipe --> chilly_bird.states.flying.Flying
-chilly_bird.objects.girls.Girl --> chilly_bird.states.game_over.GameOver
-chilly_bird.objects.textboxes.TextSprite --* chilly_bird.states.flying.Flying : groups.score
-chilly_bird.objects.textboxes.TextSprite --* chilly_bird.states.start_screen.StartScreen : groups.texts
-chilly_bird.objects.buttons.BaseButton --* chilly_bird.states.game_over.GameOver : groups.restart_button
-chilly_bird.objects.buttons.BaseButton --* chilly_bird.states.start_screen.StartScreen : groups.buttons
+chilly_bird.objects.bird.Bird --* chilly_bird.states.flying.Flying #line:DarkViolet;line.dashed;text:DarkViolet  : groups.bird
+chilly_bird.objects.bird.Bird --* chilly_bird.states.start_screen.StartScreen #line:DarkViolet;line.dashed;text:DarkViolet  : groups.bird
+chilly_bird.objects.pipes.Pipe --> chilly_bird.states.flying.Flying #line:DarkSlateGrey;line.dashed;text:red 
+chilly_bird.objects.girls.Girl --* chilly_bird.states.game_over.GameOver #line:Black;line.dashed;text:Black  : groups.girl
+chilly_bird.objects.textboxes.TextSprite -r-* chilly_bird.states.flying.Flying #line:Brown;line.dashed;text:Brown  : groups.score
+chilly_bird.objects.textboxes.TextSprite --* chilly_bird.states.start_screen.StartScreen #line:Brown;line.dashed;text:Brown  : groups.texts
+chilly_bird.objects.buttons.BaseButton --* chilly_bird.states.game_over.GameOver #line:red;line.dashed;text:red  : groups.restart_button
+chilly_bird.objects.buttons.BaseButton --* chilly_bird.states.start_screen.StartScreen #line:red;line.dashed;text:red  : groups.buttons
 
 chilly_bird.states.base.BaseState --* chilly_bird.game.Game : current_state
 chilly_bird.states.flying.Flying --* chilly_bird.game_factory.MainScene : flying
