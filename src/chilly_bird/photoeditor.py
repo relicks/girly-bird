@@ -62,6 +62,7 @@ class GraphEditor:
 
         self.back_image = open_image((max_screen_w, max_screen_h))
         rect = self.back_image.get_rect()
+        self.previous_screen_mode = pg.display.get_window_size()
         self.screen = pg.display.set_mode((rect.w, rect.h))
 
     def start_selection(self, pos):
@@ -98,8 +99,13 @@ class GraphEditor:
 
     def main(self):
         clock = pg.time.Clock()
+        # start_time = pg.time.get_ticks()
+        pg.time.wait(300)
+        pg.event.clear()
         drawing = False
+        pos = (0, 0)
         while True:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     return self.get_image_selected()
@@ -118,10 +124,11 @@ class GraphEditor:
             if drawing:
                 self.draw_current(pos)
             self.draw_selection()
-            pg.display.update()
             clock.tick(self.FPS)
+            pg.display.update()
 
+    def __enter__(self):
+        return self
 
-if __name__ == "__main__":
-    pg.init()
-    GraphEditor().mainloop()
+    def __exit__(self, *exc_details):
+        pg.display.set_mode(self.previous_screen_mode)

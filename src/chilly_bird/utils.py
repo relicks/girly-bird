@@ -3,6 +3,8 @@ from typing import TypeAlias
 
 import pygame as pg
 
+from chilly_bird import photoeditor
+
 Coordinate: TypeAlias = tuple[float, float] | pg.Vector2
 
 
@@ -17,6 +19,13 @@ def open_image(scale: tuple[int, int]) -> pg.Surface | None:
     if filename:
         img = pg.image.load(filename)
         return pg.transform.scale(img, scale)
+
+
+def open_editor(scale: tuple[int, int]) -> pg.Surface | None:
+    with photoeditor.GraphEditor() as editor:
+        img = editor.main()
+        if img:
+            return pg.transform.scale(img, scale)
 
 
 class Rect2P(pg.Rect):

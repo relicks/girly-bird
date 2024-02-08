@@ -4,6 +4,7 @@
         "blitting",
         "consts",
         "ellipsify",
+        "MOUSEBUTTONUP",
         "pygame",
         "SRCALPHA",
         "thorpy",

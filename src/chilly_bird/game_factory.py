@@ -25,7 +25,9 @@ class GameFactory:
 
         # Initializing Pygame window
         pg.init()
-        self.screen: pg.Surface = pg.display.set_mode((432, 468))
+        self.screen: pg.Surface = pg.display.set_mode(
+            (self.cfg.window.screen_width, self.cfg.window.screen_height)
+        )
         pg.display.set_caption(self.cfg.window.caption)
         pg.display.set_icon(pg.image.load(self.cfg.window.icon_path))
 
