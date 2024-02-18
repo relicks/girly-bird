@@ -1,6 +1,6 @@
 [project]
 name = "chilly-bird"
-version = "0.5.1"
+version = "0.6.0"
 description = "Just a game"
 authors = [{ name = "M" }]
 dependencies = [
@@ -56,13 +56,13 @@ omit = ["./.venv/*"]
 distribution = true
 [tool.pdm.dev-dependencies]
 test = [
-    "pytest>=8.0.0",
+    "pytest>=8.0.1",
 ]
 jupyter = [
     "ipykernel>=6.29.2",
 ]
 lint = [
-    "ruff>=0.2.1",
+    "ruff>=0.2.2",
     "black>=24.2.0",
     "pylint>=3.0.3",
 ]
