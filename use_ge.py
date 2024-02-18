@@ -19,7 +19,7 @@ while run:
             run = False
         elif event.type == pg.KEYDOWN:
             if event.key == pg.K_o:
-                img = photoeditor.GraphEditor().main()
+                img = photoeditor.GraphEditor().run()
                 if img:
                     img = photoeditor.scale_keep_ratio(img, bird_size)
                 screen = pg.display.set_mode(win_size)

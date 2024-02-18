@@ -1,30 +1,47 @@
 from tkinter import filedialog
-from typing import TypeAlias
 
 import pygame as pg
 
 from chilly_bird import photoeditor
 
-Coordinate: TypeAlias = tuple[float, float] | pg.Vector2
+from .types import Coordinate
 
 
-def get_img_path() -> str:
-    return filedialog.askopenfilename(
-        filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")]
-    )
+def scale_keep_ratio(img: pg.Surface, scale: tuple[float, float]) -> pg.Surface:
+    rect = img.get_rect()
+    w, h = rect.w, rect.h
+    max_w, max_h = scale
+    if w <= max_w and h <= max_h:
+        return img
+    aspect_x = max_w / w
+    aspect_y = max_h / h
+    ratio = min(aspect_x, aspect_y)
+    scale = w * ratio, h * ratio
+    return pg.transform.scale(img, scale)
+
+
+def create_rect(point1: Coordinate, point2: Coordinate) -> pg.Rect:
+    x1, y1 = point1
+    x2, y2 = point2
+    left = min(x1, x2)
+    top = min(y1, y2)
+    w = max(x1, x2) - left
+    h = max(y1, y2) - top
+    return pg.Rect(left, top, w, h)
 
 
 def open_image(scale: tuple[int, int]) -> pg.Surface | None:
-    filename = get_img_path()
+    filename = filedialog.askopenfilename(
+        filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")]
+    )
     if filename:
-        img = pg.image.load(filename)
-        return pg.transform.scale(img, scale)
+        img = pg.image.load(filename).convert_alpha()
+        return scale_keep_ratio(img, scale)
 
 
 def open_editor(scale: tuple[int, int]) -> pg.Surface | None:
     with photoeditor.GraphEditor() as editor:
-        img = editor.main()
-        if img:
+        if img := editor.run():
             return pg.transform.scale(img, scale)
 
 
