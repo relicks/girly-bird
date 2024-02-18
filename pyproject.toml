@@ -1,6 +1,6 @@
 [project]
 name = "chilly-bird"
-version = "0.5.0"
+version = "0.5.1"
 description = "Just a game"
 authors = [{ name = "M" }]
 dependencies = [
@@ -8,7 +8,7 @@ dependencies = [
     "omegaconf>=2.3.0",
     "loguru>=0.7.2",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.13"
 readme = "README.md"
 license = { text = "MIT" }
 
@@ -56,15 +56,19 @@ omit = ["./.venv/*"]
 distribution = true
 [tool.pdm.dev-dependencies]
 test = [
-    "pytest>=7.4.3",
+    "pytest>=8.0.0",
 ]
 jupyter = [
-    "ipykernel>=6.27.1",
+    "ipykernel>=6.29.2",
 ]
 lint = [
-    "ruff>=0.1.8",
-    "black>=23.12.0",
+    "ruff>=0.2.1",
+    "black>=24.2.0",
     "pylint>=3.0.3",
+]
+dist = [
+    "pyinstaller>=6.4.0",
+    "Pillow>=10.2.0",
 ]
 
 [tool.pdm.scripts]

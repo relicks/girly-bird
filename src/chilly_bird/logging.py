@@ -15,12 +15,16 @@ def configure_logger(
 ) -> None:
     path = Path(logs_path).resolve()
     path.mkdir(parents=True, exist_ok=True)
-
-    logger_.remove(0)
     logger_.add(path / "game.log", level=level)
-    if tracing:
-        tracing_path = path / "runtime_{time}.log"
-        logger_.add(tracing_path, level="TRACE", retention=5)
 
-    if print_stdout:
-        logger_.add(sys.stderr, level="DEBUG")
+    try:
+        logger_.remove(0)
+    except ValueError:
+        pass
+    else:
+        if tracing:
+            tracing_path = path / "runtime_{time}.log"
+            logger_.add(tracing_path, level="TRACE", retention=5)
+
+        if print_stdout:
+            logger_.add(sys.stderr, level="DEBUG")

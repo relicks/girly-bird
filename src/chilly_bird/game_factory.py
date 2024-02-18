@@ -25,6 +25,7 @@ class GameFactory:
 
         # Initializing Pygame window
         pg.init()
+        pg.mixer.init()
         self.screen: pg.Surface = pg.display.set_mode(
             (self.cfg.window.screen_width, self.cfg.window.screen_height)
         )
@@ -39,7 +40,7 @@ class GameFactory:
         )
 
         # Logger's stuff
-        configure_logger(logger, print_stdout=True)
+        configure_logger(logger, print_stdout=False)
 
         # Creating game core object
         self.game: Game = Game(
