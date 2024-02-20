@@ -43,6 +43,7 @@ class MainSceneAssetsConf:
     pipe_img: Path = MISSING
     start_button_img: Path = MISSING
     restart_button_img: Path = MISSING
+    mute_button_img: Path = MISSING
     reskin_button_img: Path = MISSING
     redress_button_img: Path = MISSING
     disappointed_girl_img: Path = MISSING
@@ -72,7 +73,5 @@ if __name__ == "__main__":
     conf_s: MainConfig = OmegaConf.structured(MainConfig)
     conf_f = OmegaConf.load("./conf/config.yaml")
     conf: MainConfig = OmegaConf.merge(conf_s, conf_f)  # type: ignore
-    # print(OmegaConf.to_yaml(conf_s))
-    # print(OmegaConf.to_yaml(conf_f))
     print(OmegaConf.to_yaml(conf))
     print(conf.assets._path.resolve())

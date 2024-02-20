@@ -2,6 +2,8 @@ from typing import Any, TypeAlias
 
 import pygame as pg
 
+from chilly_bird.types import Coordinate
+
 ColorValue: TypeAlias = pg.color.Color | int | str | tuple[int, int, int]
 
 
@@ -11,7 +13,7 @@ class TextSprite(pg.sprite.Sprite):
         initial_text: str,
         font: pg.font.Font,
         color: ColorValue,
-        pos: tuple[int, int],
+        pos: Coordinate,
     ):
         super().__init__()
         self.font = font

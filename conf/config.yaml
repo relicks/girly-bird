@@ -33,7 +33,8 @@ main_scene:
   pipe_img: ${assets.img_path}/objects/pipe.png
   start_button_img:  ${assets.img_path}/objects/start.button.png
   restart_button_img:  ${assets.img_path}/objects/restart.button.png
-  reskin_button_img:  ${assets.img_path}/objects/reskin.button.png
-  redress_button_img:  ${assets.img_path}/objects/redress.button.png
+  reskin_button_img:  ${assets.img_path}/objects/reskin.button2.png
+  redress_button_img:  ${assets.img_path}/objects/redress.button2.png
+  mute_button_img: ${assets.img_path}/objects/mute.button.png
   disappointed_girl_img:  ${assets.img_path}/objects/disappointed.girl_2.png
   bg_music:  ${assets.sound_path}/game.music.mp3
