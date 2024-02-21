@@ -23,16 +23,28 @@ class StartScreen(BaseState):
         self.font_color = (235, 221, 190)
         self.texts = [
             TextSprite(
-                "    ".join("press mouse wheel to mute the music".split()),
+                "    ".join("press start to start the game".split()),
                 font=self.font,
                 color=self.font_color,
-                pos=(45, 290),
+                pos=(75, 300),
             ),
             TextSprite(
-                "    ".join("press right mouse button to unmute the music".split()),
+                "    ".join("press skin to change the skin of the bird".split()),
                 font=self.font,
                 color=self.font_color,
-                pos=(5, 305),
+                pos=(21, 320),
+            ),
+            TextSprite(
+                "    ".join("close the editor window to exit the skin".split()),
+                font=self.font,
+                color=self.font_color,
+                pos=(22, 353),
+            ),
+            TextSprite(
+                "    ".join("editor and save your progress".split()),
+                font=self.font,
+                color=self.font_color,
+                pos=(75, 365),
             ),
         ]
         self.groups.update(
