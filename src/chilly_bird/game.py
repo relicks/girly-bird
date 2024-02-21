@@ -9,6 +9,11 @@ from chilly_bird.states import Flying
 from chilly_bird.states.base import BaseState
 
 
+class EventTypes:
+    CUSTOM_BUTTON_PRESSED = pg.event.custom_type()
+    TOGGLE_MUSIC = pg.event.custom_type()
+
+
 class Game:
     def __init__(
         self,
@@ -27,27 +32,43 @@ class Game:
         self.background: pg.Surface = pg.image.load(cfg.main_scene.bg_img).convert()
         self.road_img: pg.Surface = pg.image.load(cfg.main_scene.road_texture).convert()
 
+        self.music_plays = True
         pg.mixer.music.load(cfg.main_scene.bg_music)
         pg.mixer.music.play(-1)  # Infinite music loop
 
-    def handle_events(self) -> None:
-        for event in pg.event.get():
-            if event.type == l.QUIT:
+    def global_event_handler(self, event: pg.event.Event) -> None:
+        match event.type:
+            case l.QUIT:
                 logger.info("Close button was pressed")
                 self.running = False
 
-            if event.type == pg.constants.MOUSEBUTTONDOWN:
+            case pg.constants.MOUSEBUTTONDOWN:
                 match event.button:
-                    case 2:  # MMB
+                    case 2:  # ? MMB
                         logger.trace("MMB pressed")
                         # Stops the music if mouse wheel is pressed
-                        # with the 1 second delay
-                        pg.mixer.music.fadeout(1000)
-                    case 3:
+                        # with 1 second delay
+                        self.toggle_music(False)
+                    case 3:  # ? RMB
                         logger.trace("RMB pressed")
                         # Unmutes the music if right mouse button is pressed
-                        pg.mixer.music.play(-1)
+                        self.toggle_music(True)
 
+            case EventTypes.TOGGLE_MUSIC:
+                self.toggle_music(not self.music_plays)
+
+    def toggle_music(self, enabled: bool) -> bool:
+        if enabled:
+            pg.mixer.music.play(-1)
+            self.music_plays = True
+            return True
+        pg.mixer.music.fadeout(500)
+        self.music_plays = False
+        return False
+
+    def handle_events(self) -> None:
+        for event in pg.event.get():
+            self.global_event_handler(event)
             self.current_state.handle_event(event)
 
     def flip_state(self) -> None:

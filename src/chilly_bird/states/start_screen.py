@@ -4,10 +4,10 @@ import pygame as pg
 from loguru import logger
 from pygame.event import Event
 
-from chilly_bird import utils
+from chilly_bird import game, utils
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.bird import Bird
-from chilly_bird.objects.buttons import BaseButton, consts
+from chilly_bird.objects.buttons import Button
 from chilly_bird.objects.road import Road
 from chilly_bird.objects.textboxes import TextSprite
 from chilly_bird.states.base import BaseState
@@ -43,7 +43,7 @@ class StartScreen(BaseState):
                 ),
                 "road": pg.sprite.GroupSingle(Road(cfg)),
                 "buttons": pg.sprite.Group(
-                    BaseButton(
+                    Button(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height // 2 + 25,
                         image=pg.image.load(
@@ -51,7 +51,7 @@ class StartScreen(BaseState):
                         ).convert_alpha(),
                         button_event_name="start",
                     ),
-                    BaseButton(
+                    Button(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height - 40,
                         image=pg.image.load(
@@ -59,7 +59,7 @@ class StartScreen(BaseState):
                         ).convert_alpha(),
                         button_event_name="reskin",
                     ),
-                    BaseButton(
+                    Button(
                         x=self.screen_rect.width // 4 - 40,
                         y=self.screen_rect.height - 40,
                         image=pg.image.load(
@@ -67,16 +67,24 @@ class StartScreen(BaseState):
                         ).convert_alpha(),
                         button_event_name="redress",
                     ),
+                    Button(
+                        x=self.screen_rect.topright[0] - (26 + 10),
+                        y=self.screen_rect.topright[1] + 10,
+                        image=pg.image.load(
+                            cfg.main_scene.music_button_img
+                        ).convert_alpha(),
+                        button_event_name="toggle_music",
+                    ),
                 ),
             }
         )
 
     def on_enter(self, passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None:
-        return super().on_enter(passed_groups)
+        super().on_enter(passed_groups)
 
     def handle_event(self, event: Event) -> None:
         match event.type:
-            case consts.CUSTOM_BUTTON_PRESSED:
+            case game.EventTypes.CUSTOM_BUTTON_PRESSED:
                 match event.button:
                     case "start":
                         self.done = True
@@ -86,6 +94,13 @@ class StartScreen(BaseState):
                     case "redress":
                         logger.info("Redress button pressed")
                         self.groups["bird"].sprites()[0].redress()
+                    case "toggle_music":
+                        logger.info(f"toggle_music button pressed: {event.dict}")
+                        pg.event.post(pg.event.Event(game.EventTypes.TOGGLE_MUSIC))
+            case pg.constants.MOUSEBUTTONDOWN:
+                if event.button == 1:  # ? LMB
+                    for button in self.groups["buttons"]:
+                        button.update(event=event)
             case _:
                 pass
 

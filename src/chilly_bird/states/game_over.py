@@ -4,8 +4,9 @@ import pygame as pg
 from pygame.event import Event
 from pygame.sprite import AbstractGroup
 
+from chilly_bird import game
 from chilly_bird.configs import MainConfig
-from chilly_bird.objects.buttons import BaseButton, consts
+from chilly_bird.objects.buttons import Button
 from chilly_bird.objects.girls import Girl
 from chilly_bird.states.base import BaseState
 
@@ -30,7 +31,7 @@ class GameOver(BaseState):
                     )
                 ),
                 "restart_button": pg.sprite.GroupSingle(
-                    BaseButton(
+                    Button(
                         x=self.screen_rect.width // 2 - 40,
                         y=self.screen_rect.height // 2 - 80,
                         image=pg.image.load(
@@ -63,5 +64,8 @@ class GameOver(BaseState):
         return super().on_exit()
 
     def handle_event(self, event: Event) -> None:
-        if event.type == consts.CUSTOM_BUTTON_PRESSED and event.button == "restart":
+        if (
+            event.type == game.EventTypes.CUSTOM_BUTTON_PRESSED
+            and event.button == "restart"
+        ):
             self.done = True

@@ -1,6 +1,6 @@
 [project]
 name = "chilly-bird"
-version = "0.6.0"
+version = "0.6.1"
 description = "Just a game"
 authors = [{ name = "M" }]
 dependencies = [

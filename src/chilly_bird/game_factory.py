@@ -40,7 +40,7 @@ class GameFactory:
         )
 
         # Logger's stuff
-        configure_logger(logger, print_stdout=False)
+        configure_logger(logger, print_stdout=True)
 
         # Creating game core object
         self.game: Game = Game(
