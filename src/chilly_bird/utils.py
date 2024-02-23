@@ -2,7 +2,7 @@ from tkinter import filedialog
 
 import pygame as pg
 
-from chilly_bird import photoeditor
+from chilly_bird import graph_editor
 
 from .types import Coordinate
 
@@ -40,7 +40,7 @@ def open_image(scale: tuple[int, int]) -> pg.Surface | None:
 
 
 def open_editor(scale: tuple[int, int]) -> pg.Surface | None:
-    with photoeditor.GraphEditor() as editor:
+    with graph_editor.GraphEditor() as editor:
         if img := editor.run():
             return pg.transform.scale(img, scale)
 
