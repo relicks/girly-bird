@@ -5,7 +5,7 @@
 groups = ["default", "test", "jupyter", "lint", "dist"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:892dc1fc5c0709a87ff1d26cfbbe5300339102a386f7594213944e6fc35cea2a"
+content_hash = "sha256:bc476d7ea2d8ccb44cdb953f8e2c44b3f1e164508950712f55d8c2fe41b012a0"
 
 [[package]]
 name = "altgraph"
@@ -1060,8 +1060,7 @@ name = "typing-extensions"
 version = "4.9.0"
 requires_python = ">=3.8"
 summary = "Backported and Experimental Type Hints for Python 3.8+"
-groups = ["lint"]
-marker = "python_version < \"3.11\""
+groups = ["default", "lint"]
 files = [
     {file = "typing_extensions-4.9.0-py3-none-any.whl", hash = "sha256:af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd"},
     {file = "typing_extensions-4.9.0.tar.gz", hash = "sha256:23478f88c37f27d76ac8aee6c905017a143b0b1b886c3c9f66bc2fd94f9f5783"},

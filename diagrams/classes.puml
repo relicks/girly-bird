@@ -16,10 +16,11 @@ class "pg.sprite.Sprite" as pg.sprite.Sprite {
   + update() -> None
 }
 ' class "AssetsConf" as chilly_bird.configs.AssetsConf {
-'   + fonts_path : Path
-'   + frames_path : Path
-'   + img_path : Path
-'   + sound_path : Path
+  '   + fonts_path : Path
+  '   + frames_path : Path
+  '   + img_path : Path
+  '   + sound_path : Path
+  '
 ' }
 class "BaseButton" as chilly_bird.objects.buttons.BaseButton {
   + button_event_name : str
@@ -80,11 +81,12 @@ class "Flying" as chilly_bird.states.flying.Flying {
   + update(dt: int) -> None
 }
 ' class "FontsConf" as chilly_bird.configs.FontsConf {
-'   + color : tuple[int, int, int]
-'   + score_font : Path
-'   + score_font_size : int
-'   + text_font : Path
-'   + text_font_size : int
+  '   + color : tuple[int, int, int]
+  '   + score_font : Path
+  '   + score_font_size : int
+  '   + text_font : Path
+  '   + text_font_size : int
+  '
 ' }
 class "Game" as chilly_bird.game.Game {
   + background : pg.Surface
@@ -129,18 +131,19 @@ class "MainScene" as chilly_bird.game_factory.MainScene {
   + game_over : GameOver
 }
 ' class "MainSceneAssetsConf" as chilly_bird.configs.MainSceneAssetsConf {
-'   + bg_img : Path
-'   + bg_music : Path
-'   + bird_aframes : tuple[Path, Path, Path]
-'   + bird_jump_sound : Path
-'   + bird_size : tuple[int, int]
-'   + disappointed_girl_img : Path
-'   + pipe_img : Path
-'   + redress_button_img : Path
-'   + reskin_button_img : Path
-'   + restart_button_img : Path
-'   + road_texture : Path
-'   + start_button_img : Path
+  '   + bg_img : Path
+  '   + bg_music : Path
+  '   + bird_aframes : tuple[Path, Path, Path]
+  '   + bird_jump_sound : Path
+  '   + bird_size : tuple[int, int]
+  '   + disappointed_girl_img : Path
+  '   + pipe_img : Path
+  '   + redress_button_img : Path
+  '   + reskin_button_img : Path
+  '   + restart_button_img : Path
+  '   + road_texture : Path
+  '   + start_button_img : Path
+  '
 ' }
 class "Pipe" as chilly_bird.objects.pipes.Pipe {
   + counter : int
@@ -173,16 +176,43 @@ class "TextSprite" as chilly_bird.objects.textboxes.TextSprite {
   + current_text : str
   + font : pg.font.Font
   + image : pg.Surface
-  + previous_text : NoneType
+  + previous_text : None
   + rect : pg.Rect
   + update() -> None
 }
+
+class "GraphEditor" as chilly_bird.graph_editor.GraphEditor {
+  + FPS : int
+  + circle_color : pg.color.Color
+  + curr_color : pg.color.Color
+  + min_circle_size : int
+  + selected_rect : pg.Rect | None
+  + curr_start : chilly_bird.types.Coordinate
+  + user_image : pg.Surface | None
+  + previous_screen_mode : tuple[int, int]
+  + screen : pg.Surface
+  + background : pg.Surface
+  + create_checkered_background(tile_size: int) -> pg.Surface
+  + start_selection(pos: Coordinate) -> None
+  + new_selection(pos: Coordinate) -> None
+  + draw_circle(color: ColorValue, rect: RectValue, width: int) -> None
+  + draw_selection() -> None
+  + draw_current(pos: Coordinate) -> None
+  + draw_user_image() -> None
+  + draw_background() -> None
+  + get_image_selected() -> pg.Surface | None
+  + run() -> pg.Surface | None
+  - __enter__() -> Self
+  - __exit__(*exc_details) -> None
+}
+
 ' class "WindowConf" as chilly_bird.configs.WindowConf {
-'   + caption : str
-'   + fps : int
-'   + icon_path : Path
-'   + screen_height : int
-'   + screen_width : int
+  '   + caption : str
+  '   + fps : int
+  '   + icon_path : Path
+  '   + screen_height : int
+  '   + screen_width : int
+  '
 ' }
 chilly_bird.objects.pipes.Pipe -u-|> pg.sprite.Sprite #line:green;line.dotted;
 chilly_bird.objects.buttons.BaseButton -u-|> pg.sprite.Sprite #line:green;line.dotted;
@@ -206,7 +236,7 @@ chilly_bird.game_factory.MainScene --* chilly_bird.game_factory.GameFactory : ma
 
 chilly_bird.objects.bird.Bird --* chilly_bird.states.flying.Flying #line:DarkViolet;line.dashed;text:DarkViolet  : groups.bird
 chilly_bird.objects.bird.Bird --* chilly_bird.states.start_screen.StartScreen #line:DarkViolet;line.dashed;text:DarkViolet  : groups.bird
-chilly_bird.objects.pipes.Pipe --> chilly_bird.states.flying.Flying #line:DarkSlateGrey;line.dashed;text:red 
+chilly_bird.objects.pipes.Pipe --> chilly_bird.states.flying.Flying #line:DarkSlateGrey;line.dashed;text:red
 chilly_bird.objects.girls.Girl --* chilly_bird.states.game_over.GameOver #line:Black;line.dashed;text:Black  : groups.girl
 chilly_bird.objects.textboxes.TextSprite -r-* chilly_bird.states.flying.Flying #line:Brown;line.dashed;text:Brown  : groups.score
 chilly_bird.objects.textboxes.TextSprite --* chilly_bird.states.start_screen.StartScreen #line:Brown;line.dashed;text:Brown  : groups.texts
@@ -217,4 +247,6 @@ chilly_bird.states.base.BaseState --* chilly_bird.game.Game : current_state
 chilly_bird.states.flying.Flying --* chilly_bird.game_factory.MainScene : flying
 chilly_bird.states.game_over.GameOver --* chilly_bird.game_factory.MainScene : game_over
 chilly_bird.states.start_screen.StartScreen --* chilly_bird.game_factory.MainScene : start_screen
+
+chilly_bird.graph_editor.GraphEditor --> chilly_bird.states.start_screen.StartScreen : reskin_bird()
 @enduml

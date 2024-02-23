@@ -1,4 +1,5 @@
 import pygame as pg
+from typing_extensions import Self
 
 from . import utils
 from .types import ColorValue, Coordinate, RectValue
@@ -34,8 +35,7 @@ class GraphEditor:
         self.screen = pg.display.set_mode((rect.w, rect.h))
         self.background = self.create_checkered_background(10)
 
-    def create_checkered_background(self, tile_size: int = 20):
-        # Define the colors for the checkers
+    def create_checkered_background(self, tile_size: int = 20) -> pg.Surface:
         color1 = pg.Color(128, 128, 128)  # Grey color  1
         color2 = pg.Color(64, 64, 64)  # Grey color  2
 
@@ -121,8 +121,8 @@ class GraphEditor:
             clock.tick(self.FPS)
             pg.display.update()
 
-    def __enter__(self):
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, *exc_details):
+    def __exit__(self, *exc_details) -> None:
         pg.display.set_mode(self.previous_screen_mode)
