@@ -21,7 +21,17 @@ class Game:
         states: Mapping[str, BaseState],
         start_state: str,
         cfg: MainConfig,
-    ):
+    ) -> None:
+        """
+        The Game class manages the game loop, handling events, updating game
+        states, and rendering the game screen.
+
+        It initializes with a Pygame surface for the screen, a mapping of
+        game states, a starting state, and a configuration object.
+        The class also handles global events, toggles music playback,
+        manages game state transitions, and draws the current game state to the screen.
+        """
+
         self.running = True
         self.screen: pg.Surface = screen
         self.clock = pg.time.Clock()

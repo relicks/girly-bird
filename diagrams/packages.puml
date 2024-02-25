@@ -1,5 +1,5 @@
 @startuml packages
-set namespaceSeparator none
+' set namespaceSeparator none
 package "chilly_bird" as chilly_bird {
 }
 package "chilly_bird.configs" as chilly_bird.configs {

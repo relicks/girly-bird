@@ -1,0 +1,20 @@
+chilly_bird # top-level package, contains all game code
+ ├─ utils # contains utility functions of various purposes
+ ├─ types # contains custom types for type hinting
+ ├─ states # contains code for FSM states
+ │  ├─ start_screen # starting state --> flying state
+ │  ├─ game_over # game over state --> start_screen state
+ │  ├─ flying # main state, player controls the bird --> start_screen state
+ │  └─ base # abstract base state class, containing common state logic
+ ├─ objects # contains Sprite classes with their game logic encapsulated within
+ │  ├─ textboxes # here go sprites for displaying text
+ │  ├─ road # here go sprites for scrolling road
+ │  ├─ pipes # here go sprites for pipes
+ │  ├─ girls # here go sprites for game over girls
+ │  ├─ buttons # here go sprites for buttons
+ │  └─ bird # here go sprites for player controllers, birds in this case
+ ├─ logging # contains logger setup code
+ ├─ graph_editor # contains bird reskin window functions and classes
+ ├─ game_factory # contains convenience functions for ease of starting the game
+ ├─ game # contains main game loop and FSM implementation
+ └─ configs # contains YAML config schema and parser

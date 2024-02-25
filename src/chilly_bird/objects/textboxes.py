@@ -1,13 +1,13 @@
-from typing import Any, TypeAlias
+from typing import Any
 
 import pygame as pg
 
-from chilly_bird.types import Coordinate
-
-ColorValue: TypeAlias = pg.color.Color | int | str | tuple[int, int, int]
+from chilly_bird.types import ColorValue, Coordinate
 
 
 class TextSprite(pg.sprite.Sprite):
+    """A sprite for displaying text with Pygame, supporting dynamic text updates."""
+
     def __init__(
         self,
         initial_text: str,
