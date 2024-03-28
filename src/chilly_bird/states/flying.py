@@ -23,9 +23,13 @@ class Flying(BaseState):
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
+        """Initialize the Flying.
+
+        Raises `ValueError` if `cfg` is not passed.
+        """
         super().__init__(cfg, next_state)
         if cfg is None:
-            raise ValueError("cfg argument can't be None")
+            raise ValueError("cfg argument can't be None")  # noqa: TRY003
         self.cfg = cfg
         # ? Init params
         self.score = 0

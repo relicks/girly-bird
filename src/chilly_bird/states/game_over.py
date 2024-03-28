@@ -1,6 +1,6 @@
 """Contains implemented state of the GameOver scene."""
 
-# flake8: noqa: D107, D102
+# flake8: noqa: D102
 from collections.abc import Mapping
 
 import pygame as pg
@@ -20,9 +20,13 @@ class GameOver(BaseState):
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
+        """Initialize the GameOver.
+
+        Raises `ValueError` if `cfg` is not passed.
+        """
         super().__init__(cfg, next_state)
         if cfg is None:
-            raise ValueError("cfg argument can't be None")
+            raise ValueError("cfg argument can't be None")  # noqa: TRY003
 
         self.groups.update(
             {

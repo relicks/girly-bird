@@ -1,3 +1,6 @@
+"""Contains implemented state of the Flying scene."""
+
+# flake8: noqa: D102
 from collections.abc import Mapping
 
 import pygame as pg
@@ -14,10 +17,18 @@ from chilly_bird.states.base import BaseState
 
 
 class StartScreen(BaseState):
-    def __init__(self, cfg: MainConfig | None = None, next_state: str | None = None):
+    """StartScreen scene with UI and instructions."""
+
+    def __init__(
+        self, cfg: MainConfig | None = None, next_state: str | None = None
+    ) -> None:
+        """Initialize the StartScreen.
+
+        Raises `ValueError` if `cfg` is not passed.
+        """
         super().__init__(cfg, next_state)
         if cfg is None:
-            raise ValueError("cfg argument can't be None")
+            raise ValueError("cfg argument can't be None")  # noqa: TRY003
         self.cfg = cfg
         self.font = pg.font.Font(cfg.fonts.text_font, cfg.fonts.text_font_size)
         self.font_color = (235, 221, 190)
