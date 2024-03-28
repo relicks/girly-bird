@@ -1,3 +1,6 @@
+"""Contains implemented state of the GameOver scene."""
+
+# flake8: noqa: D107, D102
 from collections.abc import Mapping
 
 import pygame as pg
@@ -12,6 +15,8 @@ from chilly_bird.states.base import BaseState
 
 
 class GameOver(BaseState):
+    """GameOver scene."""
+
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:

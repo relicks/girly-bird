@@ -1,14 +1,17 @@
+"""Start the game from here."""
+
 import sys
-from os import chdir, path
+from os import chdir
+from pathlib import Path
 
 from chilly_bird import GameFactory
 
 
-def main():
+def main() -> None:
     """Game entrypoint, supports PyInstaller and normal Python proccess."""
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
         print("running in a PyInstaller bundle", file=sys.stderr)
-        chdir(path.abspath(path.dirname(__file__)))
+        chdir(Path(__file__).parent.resolve())
     else:
         print("running in a normal Python process", file=sys.stderr)
 

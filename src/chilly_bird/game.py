@@ -1,3 +1,5 @@
+"""Contains the implementation of the main game loop in the form of FST."""
+
 from collections.abc import Mapping
 
 import pygame as pg
@@ -10,11 +12,24 @@ from chilly_bird.states.base import BaseState
 
 
 class EventTypes:
+    """Custom pygame events."""
+
     CUSTOM_BUTTON_PRESSED = pg.event.custom_type()
     TOGGLE_MUSIC = pg.event.custom_type()
 
 
 class Game:
+    """The main game loop.
+
+    The Game class manages the game loop, handling events, updating game states,
+    and rendering the game screen.
+
+    It initializes with a Pygame surface for the screen, a mapping of
+    game states, a starting state, and a configuration object.
+    The class also handles global events, toggles music playback,
+    manages game state transitions, and draws the current game state to the screen.
+    """
+
     def __init__(
         self,
         screen: pg.Surface,
@@ -22,15 +37,7 @@ class Game:
         start_state: str,
         cfg: MainConfig,
     ) -> None:
-        """
-        The Game class manages the game loop, handling events, updating game
-        states, and rendering the game screen.
-
-        It initializes with a Pygame surface for the screen, a mapping of
-        game states, a starting state, and a configuration object.
-        The class also handles global events, toggles music playback,
-        manages game state transitions, and draws the current game state to the screen.
-        """
+        """Initialize the Game object."""
 
         self.running = True
         self.screen: pg.Surface = screen
@@ -47,6 +54,7 @@ class Game:
         pg.mixer.music.play(-1)  # Infinite music loop
 
     def global_event_handler(self, event: pg.event.Event) -> None:
+        """Handle the global events, not pertaining to any particular state."""
         match event.type:
             case l.QUIT:
                 logger.info("Close button was pressed")
@@ -58,16 +66,17 @@ class Game:
                         logger.trace("MMB pressed")
                         # Stops the music if mouse wheel is pressed
                         # with 1 second delay
-                        self.toggle_music(False)
+                        self.toggle_music(enabled=False)
                     case 3:  # ? RMB
                         logger.trace("RMB pressed")
                         # Unmutes the music if right mouse button is pressed
-                        self.toggle_music(True)
+                        self.toggle_music(enabled=True)
 
             case EventTypes.TOGGLE_MUSIC:
-                self.toggle_music(not self.music_plays)
+                self.toggle_music(enabled=not self.music_plays)
 
-    def toggle_music(self, enabled: bool) -> bool:
+    def toggle_music(self, *, enabled: bool) -> bool:
+        """Toggle the global background music."""
         if enabled:
             pg.mixer.music.play(-1)
             self.music_plays = True
@@ -77,11 +86,13 @@ class Game:
         return False
 
     def handle_events(self) -> None:
+        """Handle this frames events."""
         for event in pg.event.get():
             self.global_event_handler(event)
             self.current_state.handle_event(event)
 
     def flip_state(self) -> None:
+        """Properly transition from the `current_state` to the `next_state`."""
         # current_state = self.state_name
         if (next_state := self.current_state.next_state) is not None:
             logger.info(
@@ -102,11 +113,13 @@ class Game:
             )
 
     def update_state(self, dt: int) -> None:
+        """Handle this frames game objects' states updates."""
         if self.current_state.done:
             self.flip_state()
         self.current_state.update(dt)
 
     def draw(self) -> None:
+        """Draw the current frame on the `screen`."""
         self.screen.blit(self.background, (0, 0))
         self.current_state.draw(self.screen)
 
@@ -115,6 +128,7 @@ class Game:
             self.screen.blit(self.road_img, (self.current_state.road_scroll, 384))
 
     def run(self) -> None:
+        """Run the game loop."""
         while self.running:
             dt: int = self.clock.tick(self.fps)
             self.handle_events()

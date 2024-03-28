@@ -1,4 +1,4 @@
-# -*- mode: python ; coding: utf-8 -*-  # noqa: UP009
+# -*- mode: python ; coding: utf-8 -*-  # noqa: UP009, D100
 
 import argparse
 

@@ -1,17 +1,25 @@
+"""Contains implemented state of the Flying scene."""
+
+# flake8: noqa: D107, D102
 from random import randint
+from typing import TYPE_CHECKING
 
 import pygame as pg
 from loguru import logger
 from pygame.sprite import AbstractGroup
 
 from chilly_bird.configs import MainConfig
-from chilly_bird.objects.bird import Bird
 from chilly_bird.objects.pipes import Pipe
 from chilly_bird.objects.textboxes import TextSprite
 from chilly_bird.states.base import BaseState
 
+if TYPE_CHECKING:
+    from chilly_bird.objects.bird import Bird
+
 
 class Flying(BaseState):
+    """Flying scene."""
+
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
@@ -71,6 +79,7 @@ class Flying(BaseState):
         return self.groups
 
     def inc_score(self) -> None:
+        """Increments the score when needed."""
         if len(self.groups["pipes"]) > 0:  # Some pipes had been created
             current_pipe: Pipe = self.groups["pipes"].sprites()[0]
             bird = self.groups["bird"].sprites()[0]
@@ -82,6 +91,7 @@ class Flying(BaseState):
                 self.score += 1
 
     def handle_collision(self) -> None:
+        """Handle collisions between Bird and Pipes."""
         # ? Collision handling
         bird = self.groups["bird"].sprites()[0]
         pipe_group = self.groups["pipes"]
