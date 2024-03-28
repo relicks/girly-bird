@@ -1,3 +1,5 @@
+"""Contains schemas and utilities for game configs."""
+
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -69,9 +71,13 @@ def load_config(path: str) -> MainConfig:
     return conf
 
 
-if __name__ == "__main__":
+def _debug_load() -> None:
     conf_s: MainConfig = OmegaConf.structured(MainConfig)
     conf_f = OmegaConf.load("./conf/config.yaml")
     conf: MainConfig = OmegaConf.merge(conf_s, conf_f)  # type: ignore
     print(OmegaConf.to_yaml(conf))
     print(conf.assets._path.resolve())
+
+
+if __name__ == "__main__":
+    _debug_load()

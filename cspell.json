@@ -5,12 +5,14 @@
         "consts",
         "datas",
         "ellipsify",
+        "FURB",
         "MEIPASS",
         "MOUSEBUTTONUP",
         "pygame",
         "pyinstaller",
         "SRCALPHA",
         "thorpy",
+        "tryceratops",
         "unmute",
         "Unmutes"
     ]

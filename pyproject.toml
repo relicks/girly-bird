@@ -23,25 +23,34 @@ line-length = 88
 target-version = "py310"
 include = ["*.py", "*.pyi", "**/pyproject.toml", "*.ipynb"]
 select = [
-    "E",  # pycodestyle
-    "F",  # pyflakes
-    "UP", # pyupgrade
-    # "D",   # pydocstyle
-    "I",   # isort
-    "PL",  # pylint
-    "RUF", # ruff-specific
-    "N",   # pep8-naming
-    "C4",  # flake8-comprehensions
-    "B",   # flake8-bugbear
-    "PT",  # flake8-pytest-style
+    "D",   # pydocstyle
+    "ANN", # flake8-annotations
+    "TCH", # flake8-type-checking
+    "FBT", # flake8-boolean-trap
+
+    "E",    # pycodestyle
+    "F",    # pyflakes
+    "UP",   # pyupgrade
+    "I",    # isort
+    "PL",   # pylint
+    "RUF",  # ruff-specific
+    "N",    # pep8-naming
+    "C4",   # flake8-comprehensions
+    "B",    # flake8-bugbear
+    "PTH",  # flake8-use-pathlib
+    "TRY",  # tryceratops
+    "PERF", # Perflint 
+    "FURB", # refurb 
+    "PT",   # flake8-pytest-style
 ]
 ignore = [
     "RUF001", # ambiguous cyrillic letters
     "RUF002", # ambiguous cyrillic letters
+    "ANN101", # missing-type-self #? deprecated 
 ]
 
-[tool.ruff.per-file-ignores]
-"test_custom_list.py" = ["RUF005"]
+# [tool.ruff.per-file-ignores]
+# "test_custom_list.py" = ["RUF005"]
 
 [tool.ruff.isort]
 known-first-party = ["chilly_bird"]
@@ -56,22 +65,10 @@ omit = ["./.venv/*"]
 [tool.pdm]
 distribution = true
 [tool.pdm.dev-dependencies]
-test = [
-    "pytest>=8.0.1",
-]
-jupyter = [
-    "ipykernel>=6.29.2",
-]
-lint = [
-    "ruff>=0.2.2",
-    "black>=24.2.0",
-    "pylint>=3.0.3",
-]
-dist = [
-    "pyinstaller>=6.4.0",
-    "Pillow>=10.2.0",
-]
+test = ["pytest>=8.0.1"]
+jupyter = ["ipykernel>=6.29.2"]
+lint = ["ruff>=0.2.2", "black>=24.2.0", "pylint>=3.0.3"]
+dist = ["pyinstaller>=6.4.0", "Pillow>=10.2.0"]
 
 [tool.pdm.scripts]
-start = {call = "main:main", help = "Starts the game"}
-
+start = { call = "main:main", help = "Starts the game" }
