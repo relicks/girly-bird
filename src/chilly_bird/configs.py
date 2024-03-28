@@ -9,6 +9,8 @@ from omegaconf import MISSING, OmegaConf
 
 @dataclass
 class AssetsConf:
+    """Schema for assets path config."""
+
     _path: Path = MISSING
     fonts_path: Path = MISSING
     frames_path: Path = MISSING
@@ -18,6 +20,8 @@ class AssetsConf:
 
 @dataclass
 class WindowConf:
+    """Schema for main window settings config."""
+
     fps: int = 60
     screen_width: int = 432
     screen_height: int = 468
@@ -27,6 +31,8 @@ class WindowConf:
 
 @dataclass
 class FontsConf:
+    """Schema for fonts settings config."""
+
     color: tuple[int, int, int] = (235, 221, 190)
     score_font: Path = MISSING
     score_font_size: int = MISSING
@@ -36,6 +42,8 @@ class FontsConf:
 
 @dataclass
 class MainSceneAssetsConf:
+    """Schema for main scene settings config."""
+
     bird_aframes: tuple[Path, Path, Path] = MISSING
     bird_jump_sound: Path = MISSING
     bird_size: tuple[int, int] = (50, 35)
@@ -53,6 +61,8 @@ class MainSceneAssetsConf:
 
 @dataclass
 class MainConfig:
+    """Schema for main config."""
+
     assets: AssetsConf = field(default_factory=lambda: AssetsConf())
     window: WindowConf = field(default_factory=lambda: WindowConf())
     fonts: FontsConf = field(default_factory=lambda: FontsConf())
@@ -62,6 +72,7 @@ class MainConfig:
 
 
 def load_config(path: str) -> MainConfig:
+    """Load OmegaConf structured config from file."""
     r_path = Path(path).resolve()
     logger.info("Loading config from {}", r_path)
 
