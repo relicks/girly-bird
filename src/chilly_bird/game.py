@@ -66,18 +66,28 @@ class Game:
                         logger.trace("MMB pressed")
                         # Stops the music if mouse wheel is pressed
                         # with 1 second delay
-                        self.toggle_music(enabled=False)
+                        self.toggle_music(enable=False)
                     case 3:  # ? RMB
                         logger.trace("RMB pressed")
                         # Unmutes the music if right mouse button is pressed
-                        self.toggle_music(enabled=True)
+                        self.toggle_music(enable=True)
 
             case EventTypes.TOGGLE_MUSIC:
-                self.toggle_music(enabled=not self.music_plays)
+                self.toggle_music(enable=not self.music_plays)
 
-    def toggle_music(self, *, enabled: bool) -> bool:
-        """Toggle the global background music."""
-        if enabled:
+    def toggle_music(self, *, enable: bool) -> bool:
+        """Toggle the global background music.
+
+        Args:
+        ----
+            enable: whether to enable the music or not
+
+        Returns:
+        -------
+            True - if music is now enabled; False - if disabled
+
+        """
+        if enable:
             pg.mixer.music.play(-1)
             self.music_plays = True
             return True
