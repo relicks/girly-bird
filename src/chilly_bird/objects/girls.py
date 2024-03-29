@@ -1,10 +1,25 @@
-import pygame as pg
+"""Contains game over scene reproachful characters."""
 
-# from loguru import logger
+import pygame as pg
+from loguru import logger
+
+from chilly_bird.types import Coordinate
 
 
 class Girl(pg.sprite.Sprite):
-    def __init__(self, x: int, y: int, image: pg.Surface):
+    """Sad girl."""
+
+    def __init__(self, pos: Coordinate, image: pg.Surface) -> None:
+        """Create new girl object.
+
+        Args:
+        ----
+            pos: a position to place the sprite at
+            image: sprite image
+
+        """
         super().__init__()
         self.image = image
-        self.rect = self.image.get_rect(topleft=(x, y))
+        self.rect = self.image.get_rect(topleft=pos)
+
+        logger.info(f"{__class__} initialized")
