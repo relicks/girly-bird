@@ -31,11 +31,11 @@ class Game:
     """
 
     def __init__(
-        self,
-        screen: pg.Surface,
-        states: Mapping[str, BaseState],
-        start_state: str,
-        cfg: MainConfig,
+            self,
+            screen: pg.Surface,
+            states: Mapping[str, BaseState],
+            start_state: str,
+            cfg: MainConfig,
     ) -> None:
         """Initialize the Game object."""
 
@@ -65,7 +65,7 @@ class Game:
                     case 2:  # ? MMB
                         logger.trace("MMB pressed")
                         # Stops the music if mouse wheel is pressed
-                        # with 1 second delay
+                        # with 1-second delay
                         self.toggle_music(enable=False)
                     case 3:  # ? RMB
                         logger.trace("RMB pressed")

@@ -62,7 +62,7 @@ class StartScreen(BaseState):
             {
                 "text": pg.sprite.Group(*self.texts),
                 "bird": pg.sprite.GroupSingle(
-                    Bird(50, self.screen_rect.height / 2, cfg)
+                    Bird((50, self.screen_rect.height / 2), cfg)
                 ),
                 "road": pg.sprite.GroupSingle(Road(cfg)),
                 "buttons": pg.sprite.Group(

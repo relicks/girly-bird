@@ -8,7 +8,7 @@ from chilly_bird import GameFactory
 
 
 def main() -> None:
-    """Game entrypoint, supports PyInstaller and normal Python proccess."""
+    """Game entrypoint, supports PyInstaller and normal Python process."""
     if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
         print("running in a PyInstaller bundle", file=sys.stderr)
         chdir(Path(__file__).parent.resolve())

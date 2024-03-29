@@ -87,6 +87,7 @@ def _debug_load() -> None:
     conf_f = OmegaConf.load("./conf/config.yaml")
     conf: MainConfig = OmegaConf.merge(conf_s, conf_f)  # type: ignore
     print(OmegaConf.to_yaml(conf))
+    # noinspection PyProtectedMember
     print(conf.assets._path.resolve())
 
 
