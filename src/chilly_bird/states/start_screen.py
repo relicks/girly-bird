@@ -19,6 +19,7 @@ from chilly_bird.states.base import BaseState
 class StartScreen(BaseState):
     """StartScreen scene with UI and instructions."""
 
+    # noinspection PyTypeChecker
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
@@ -67,37 +68,45 @@ class StartScreen(BaseState):
                 "road": pg.sprite.GroupSingle(Road(cfg)),
                 "buttons": pg.sprite.Group(
                     Button(
-                        x=self.screen_rect.width // 2 - 40,
-                        y=self.screen_rect.height // 2 + 25,
+                        pos=(
+                            self.screen_rect.width // 2 - 40,
+                            self.screen_rect.height // 2 + 25,
+                        ),
                         image=pg.image.load(
                             cfg.main_scene.start_button_img
                         ).convert_alpha(),
                         button_event_name="start",
-                    ),
+                    ),  # type: ignore
                     Button(
-                        x=self.screen_rect.width // 2 - 40,
-                        y=self.screen_rect.height - 40,
+                        pos=(
+                            self.screen_rect.width // 2 - 40,
+                            self.screen_rect.height - 40,
+                        ),
                         image=pg.image.load(
                             cfg.main_scene.reskin_button_img
                         ).convert_alpha(),
                         button_event_name="reskin",
-                    ),
+                    ),  # type: ignore
                     Button(
-                        x=self.screen_rect.width // 4 - 40,
-                        y=self.screen_rect.height - 40,
+                        pos=(
+                            self.screen_rect.width // 4 - 40,
+                            self.screen_rect.height - 40,
+                        ),
                         image=pg.image.load(
                             cfg.main_scene.redress_button_img
                         ).convert_alpha(),
                         button_event_name="redress",
-                    ),
+                    ),  # type: ignore
                     Button(
-                        x=self.screen_rect.topright[0] - (26 + 10),
-                        y=self.screen_rect.topright[1] + 10,
+                        pos=(
+                            self.screen_rect.topright[0] - (26 + 10),
+                            self.screen_rect.topright[1] + 10,
+                        ),
                         image=pg.image.load(
                             cfg.main_scene.music_button_img
                         ).convert_alpha(),
                         button_event_name="toggle_music",
-                    ),
+                    ),  # type: ignore
                 ),
             }
         )

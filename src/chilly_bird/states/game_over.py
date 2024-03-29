@@ -41,8 +41,10 @@ class GameOver(BaseState):
                 ),
                 "restart_button": pg.sprite.GroupSingle(
                     Button(
-                        x=self.screen_rect.width // 2 - 40,
-                        y=self.screen_rect.height // 2 - 80,
+                        pos=(
+                            self.screen_rect.width // 2 - 40,
+                            self.screen_rect.height // 2 - 80,
+                        ),
                         image=pg.image.load(
                             cfg.main_scene.restart_button_img
                         ).convert_alpha(),
