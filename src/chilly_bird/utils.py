@@ -1,26 +1,61 @@
+"""Contains various utilities that are used throughout the library."""
+
 from tkinter import filedialog
 
 import pygame as pg
 
 from chilly_bird import graph_editor
+from chilly_bird.types import Coordinate
 
-from .types import Coordinate
 
+def scale_keep_ratio(img: pg.Surface, max_size_box: tuple[float, float]) -> pg.Surface:
+    """Scales the `img` down to fit into `max_size_box`, keeping the aspect ratio.
 
-def scale_keep_ratio(img: pg.Surface, scale: tuple[float, float]) -> pg.Surface:
+    Args:
+    ----
+        img: image to scale down
+        max_size_box: the size `(w, h)` of the box to fit the `img` in, in px
+
+    Returns:
+    -------
+        Scaled down `pygame.Surface`. If the given `img` is smaller
+
+    """
     rect = img.get_rect()
     w, h = rect.w, rect.h
-    max_w, max_h = scale
+    max_w, max_h = max_size_box
     if w <= max_w and h <= max_h:
         return img
     aspect_x = max_w / w
     aspect_y = max_h / h
     ratio = min(aspect_x, aspect_y)
-    scale = w * ratio, h * ratio
-    return pg.transform.scale(img, scale)
+    max_size_box = w * ratio, h * ratio
+    return pg.transform.scale(img, max_size_box)
 
 
 def create_rect(point1: Coordinate, point2: Coordinate) -> pg.Rect:
+    """Create a Pygame Rect object from two points.
+
+    This function takes two points, each represented as a tuple of (x, y)
+    coordinates, and returns a Pygame Rect object that encompasses the area between
+    these two points. The Rect object is defined by its top-left corner (left, top) 
+    and its width and height.
+
+    Args:
+    ----
+        point1: The first point, defined as a tuple of (x, y) coordinates.
+        point2: The second point, defined as a tuple of (x, y) coordinates.
+
+    Returns:
+    -------
+        A Pygame Rect object that represents the rectangle defined by the two points.
+
+    Example:
+    -------
+        >>> create_rect((10, 20), (30, 40))
+        <rect(10, 20, 20, 20)>
+
+    """
     x1, y1 = point1
     x2, y2 = point2
     left = min(x1, x2)
@@ -30,23 +65,38 @@ def create_rect(point1: Coordinate, point2: Coordinate) -> pg.Rect:
     return pg.Rect(left, top, w, h)
 
 
-def open_image(scale: tuple[int, int]) -> pg.Surface | None:
+def open_image(max_size_box: tuple[int, int]) -> pg.Surface | None:
+    """Open an image using tkinter `filedialog` and return the pg.Surface object.
+
+    Args:
+    ----
+        max_size_box: the size `(w, h)` of the box to fit the returned surface in, in px
+
+    Returns:
+    -------
+        A pg.Surface object no larger than `max_size_box`
+
+    """
     filename = filedialog.askopenfilename(
         filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif;*.bmp")]
     )
     if filename:
         img = pg.image.load(filename).convert_alpha()
-        return scale_keep_ratio(img, scale)
+        return scale_keep_ratio(img, max_size_box)
 
 
-def open_editor(scale: tuple[int, int]) -> pg.Surface | None:
+def open_editor(max_size_box: tuple[int, int]) -> pg.Surface | None:
+    """Open the skin editor in a new game loop and return the user-specified new skin.
+
+    Args:
+    ----
+        max_size_box: the size `(w, h)` of the box to fit the new skin in, in px
+
+    Returns:
+    -------
+        A new skin, no larger than `max_size_box`
+
+    """
     with graph_editor.GraphEditor() as editor:
         if img := editor.run():
-            return pg.transform.scale(img, scale)
-
-
-class Rect2P(pg.Rect):
-    def __init__(self, topleft: Coordinate, bottomright: Coordinate) -> None:
-        super().__init__(
-            topleft, (bottomright[0] - topleft[0], bottomright[1] - topleft[1])
-        )
+            return pg.transform.scale(img, max_size_box)

@@ -1,5 +1,8 @@
+"""Contains game app initialization logic."""
+
 import sys
 from dataclasses import dataclass
+from typing import NoReturn
 
 import pygame as pg
 from loguru import logger
@@ -12,13 +15,19 @@ from chilly_bird.states import Flying, GameOver, StartScreen
 
 @dataclass
 class MainScene:
+    """Represents all the states employed in the game."""
+
     start_screen: StartScreen
     flying: Flying
     game_over: GameOver
 
 
 class GameFactory:
+    """Constructs the instance of the `Game` class, supports with-statement."""
+
     def __init__(self, config_path: str | None = None) -> None:
+        """Initialize the game state, window and logs."""
+
         # Loading game config
         default_config_path = "./conf/config.yaml"
         self.cfg: MainConfig = load_config(config_path or default_config_path)
@@ -54,9 +63,11 @@ class GameFactory:
             cfg=self.cfg,
         )
 
-    def __enter__(self):
+    def __enter__(self) -> Game:
+        """Return the instance of the created `Game`."""
         return self.game
 
-    def __exit__(self, *exc_details):
+    def __exit__(self, *exc_details) -> NoReturn:  # noqa: ANN002
+        """Shut down the `Game` app."""
         pg.quit()
         sys.exit()

@@ -1,3 +1,5 @@
+"""Contains various utility types."""
+
 from collections.abc import Sequence
 
 from pygame.color import Color
