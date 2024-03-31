@@ -1,5 +1,7 @@
 """A user-facing bird sprite editor."""
 
+from typing import Any
+
 import pygame as pg
 from typing_extensions import Self
 
@@ -119,7 +121,7 @@ class GraphEditor:
 
     def run(self) -> pg.Surface | None:
         """Run the editor, allowing the user to select and edit the image.
-        
+
         Returns
         -------
             User's selection as a pygame Surface or None, if no selection was made.
@@ -159,7 +161,7 @@ class GraphEditor:
         """Enter the context manager."""
         return self
 
-    def __exit__(self, *exc_details) -> None:
+    def __exit__(self, *exc_details: tuple[Any, ...]) -> None:
         """Exit the context manager, resetting the screen mode (size)."""
         pg.display.set_mode(self.previous_screen_mode)
 
