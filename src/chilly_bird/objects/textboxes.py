@@ -34,7 +34,7 @@ class TextSprite(pg.sprite.Sprite):
         self.previous_text: str | None = None
         self.current_text = text
         self.color = color
-        self.image = self.font.render(text, antialias=True, color=self.color)
+        self.image = self.font.render(text, True, self.color)  # noqa: FBT003
         self.rect = self.image.get_rect(topleft=pos)
 
     @override
@@ -43,4 +43,4 @@ class TextSprite(pg.sprite.Sprite):
         if new_text is not None and new_text != self.previous_text:
             self.previous_text = self.current_text
             self.current_text = new_text
-            self.image = self.font.render(new_text, antialias=True, color=self.color)
+            self.image = self.font.render(new_text, True, self.color)  # noqa: FBT003
