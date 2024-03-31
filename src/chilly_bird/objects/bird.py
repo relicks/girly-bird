@@ -13,8 +13,9 @@ from chilly_bird.types import Coordinate
 class Bird(pg.sprite.Sprite):
     """Player controller with drawing and game logic."""
 
+    @override
     def __init__(self, initial_pos: Coordinate, cfg: MainConfig) -> None:
-        """Construct a new Bird object.
+        """Construct a new Bird Sprite.
 
         Args:
         ----

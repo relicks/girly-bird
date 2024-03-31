@@ -13,7 +13,8 @@ from chilly_bird.types import Coordinate
 class Pipe(pg.sprite.Sprite):
     """The generic pipe, but with a little jiggle."""
 
-    def __init__(  # noqa: PLR0913
+    @override
+    def __init__(
         self,
         pos: Coordinate,
         direction: Literal["up"] | Literal["down"],

@@ -2,6 +2,7 @@
 
 import pygame as pg
 from loguru import logger
+from typing_extensions import override
 
 from chilly_bird.types import Coordinate
 
@@ -9,8 +10,9 @@ from chilly_bird.types import Coordinate
 class Girl(pg.sprite.Sprite):
     """Sad girl."""
 
+    @override
     def __init__(self, pos: Coordinate, image: pg.Surface) -> None:
-        """Create new girl object.
+        """Create new Girl Sprite.
 
         Args:
         ----

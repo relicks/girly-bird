@@ -14,8 +14,10 @@ class Button(pg.sprite.Sprite):
     """A simple button that employs pygame's direct mouse access.
 
     Publishes the `CUSTOM_BUTTON_PRESSED` click event on the pygame's event queue.
+    It is implemented as pygame's `Sprite`.
     """
 
+    @override
     def __init__(
         self,
         pos: Coordinate,
