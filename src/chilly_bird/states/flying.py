@@ -125,21 +125,26 @@ class Flying(BaseState):
                 # Pipes are randomly generated within the range of 100 pixels:
                 pipe_distance = randint(-50, 50)
                 pipe_down = Pipe(
-                    self.screen_rect.width,
-                    round(self.screen_rect.height / 2 + pipe_distance),
-                    1,
-                    self.gap_btw_pipes,
-                    self.scroll_speed,
-                    self.cfg,
+                    pos=(
+                        self.screen_rect.width,
+                        round(self.screen_rect.height / 2 + pipe_distance),
+                    ),
+                    direction="down",
+                    pipe_gap=self.gap_btw_pipes,
+                    scroll_speed=self.scroll_speed,
+                    cfg=self.cfg,
                 )
                 pipe_up = Pipe(
-                    self.screen_rect.width,
-                    round(self.screen_rect.height / 2 + pipe_distance),
-                    -1,
-                    self.gap_btw_pipes,
-                    self.scroll_speed,
-                    self.cfg,
+                    pos=(
+                        self.screen_rect.width,
+                        round(self.screen_rect.height / 2 + pipe_distance),
+                    ),
+                    direction="up",
+                    pipe_gap=self.gap_btw_pipes,
+                    scroll_speed=self.scroll_speed,
+                    cfg=self.cfg,
                 )
+
                 pipe_group.add([pipe_down, pipe_up])
                 self.leftmost_pipe = current_time
 
