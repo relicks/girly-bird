@@ -1,11 +1,11 @@
 """Contains implemented state of the GameOver scene."""
 
-# flake8: noqa: D102
 from collections.abc import Mapping
 
 import pygame as pg
 from pygame.event import Event
 from pygame.sprite import AbstractGroup
+from typing_extensions import override
 
 from chilly_bird import game
 from chilly_bird.configs import MainConfig
@@ -32,8 +32,7 @@ class GameOver(BaseState):
             {
                 "girl": pg.sprite.GroupSingle(
                     Girl(
-                        x=120,
-                        y=240,
+                        pos=(120, 240),
                         image=pg.image.load(
                             cfg.main_scene.disappointed_girl_img
                         ).convert_alpha(),
@@ -54,6 +53,7 @@ class GameOver(BaseState):
             }
         )
 
+    @override
     def on_enter(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
         carry_over = ["bird", "pipes", "road", "score"]
         for group_name in carry_over:
@@ -69,11 +69,13 @@ class GameOver(BaseState):
         del self.groups["restart_button"]
         self.groups["restart_button"] = restart_button
 
+    @override
     def on_exit(self) -> dict[str, AbstractGroup]:
         self.groups["bird"].sprites()[0].reset()
         self.groups["pipes"].empty()
         return super().on_exit()
 
+    @override
     def handle_event(self, event: Event) -> None:
         if (
             event.type == game.EventTypes.CUSTOM_BUTTON_PRESSED

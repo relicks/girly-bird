@@ -4,6 +4,7 @@ from time import perf_counter_ns
 from typing import Any
 
 import pygame as pg
+from typing_extensions import override
 
 from chilly_bird import game
 from chilly_bird.types import Coordinate
@@ -39,7 +40,8 @@ class Button(pg.sprite.Sprite):
         self.was_pressed_on_ns = perf_counter_ns()
         self.press_delay_ns = press_delay_ms * 10**6
 
-    def update(self, *args: Any, **kwargs: Any) -> None:  # noqa: D102, ANN401
+    @override
+    def update(self, *args: Any, **kwargs: Any) -> None:
         pos = pg.mouse.get_pos()
         if self.rect.collidepoint(pos):
             if pg.mouse.get_pressed()[0] == 1 and (

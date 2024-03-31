@@ -4,6 +4,7 @@ from typing import Any
 
 import pygame as pg
 from loguru import logger
+from typing_extensions import override
 
 from chilly_bird.configs import MainConfig
 from chilly_bird.types import Coordinate
@@ -73,6 +74,7 @@ class Bird(pg.sprite.Sprite):
             pos = self.initial_pos
         self.rect = self.image.get_rect(center=pos)
 
+    @override
     def update(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401, D102
         logger.trace("Bird updating")
         if self.flying:
