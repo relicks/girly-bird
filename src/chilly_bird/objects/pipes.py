@@ -1,22 +1,37 @@
-# flake8: noqa: PLR0913
-from typing import Any
+"""Contains implementations of game pipe-like obstacles."""
+
+from typing import Any, Literal
 
 import pygame as pg
 from loguru import logger
+from typing_extensions import override
 
 from chilly_bird.configs import MainConfig
+from chilly_bird.types import Coordinate
 
 
 class Pipe(pg.sprite.Sprite):
-    def __init__(
+    """The generic pipe, but with a little jiggle."""
+
+    def __init__(  # noqa: PLR0913
         self,
-        x: int,
-        y: int,
-        location: int,
+        pos: Coordinate,
+        direction: Literal["up"] | Literal["down"],
         pipe_gap: int,
         scroll_speed: int,
         cfg: MainConfig,
-    ):
+    ) -> None:
+        """Construct a new Pipe object.
+
+        Args:
+        ----
+            pos: a position to place the pipe at
+            direction: where pipe will be pointing
+            pipe_gap: a gap between consecutive pipes, in px
+            scroll_speed: of pipe, in px/frame
+            cfg: main config object
+
+        """
         super().__init__()
 
         self.image = pg.image.load(cfg.main_scene.pipe_img).convert_alpha()
@@ -29,20 +44,36 @@ class Pipe(pg.sprite.Sprite):
         self.div = 10
         self.step = 1
 
-        if location == 1:  # Pipe pointing up
-            # ? +35 pixels in order to create a gap
-            self.rect.topleft = (x, round(y + self.pipe_gap / 2))
-        if location == -1:  # Pipe pointing down
-            # Flipping not by the x-axis (False), but by the y-axis (True)
-            self.image = pg.transform.flip(self.image, False, True)
-            # ? -35 pixels in order to create a gap (70 pixels overall)
-            self.rect.bottomleft = (x, round(y - self.pipe_gap / 2))
-        logger.trace("Pipe initialized at ({}, {}), loc={}", x, y, location)
+        x, y = pos
+        match direction:
+            case "up":
+                # ? +35 pixels in order to create a gap
+                self.rect.topleft = (round(x), round(y + self.pipe_gap / 2))
+            case "down":
+                # Flipping not by the x-axis (False), but by the y-axis (True)
+                self.image = pg.transform.flip(self.image, flip_x=False, flip_y=True)
+                # ? -35 pixels in order to create a gap (70 pixels overall)
+                self.rect.bottomleft = (round(x), round(y - self.pipe_gap / 2))
+            case _:
+                raise ValueError(  # noqa: TRY003
+                    "`direction` must be either 'up' or 'down'"
+                )
 
+        # if location == 1:  # Pipe pointing up
+        # if location == -1:  # Pipe pointing down
+        logger.trace("Pipe initialized at ({}, {}), direction={}", x, y, direction)
+
+    @override
     def update(self, *args: Any, **kwargs: Any) -> None:
+        # Pipes are scrolled here
         logger.trace("Pipe updating")
-        new_scroll_speed = kwargs.get("scroll_speed")
-        if new_scroll_speed is not None:
+        # new_scroll_speed = kwargs.get("scroll_speed")
+        if (new_scroll_speed := kwargs.get("scroll_speed")) is not None:
+            logger.debug(
+                "Pipes scroll speed changed from {} to {}",
+                self.scroll_speed,
+                new_scroll_speed,
+            )
             self.scroll_speed = new_scroll_speed
 
         if self.scroll_speed == 0:
