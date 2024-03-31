@@ -33,12 +33,12 @@ def configure_logger(
     path.mkdir(parents=True, exist_ok=True)
     logger_.add(path / "game.log", level=level)
 
-    try:
+    try:  # trying to remove the default handler
         logger_.remove(0)
     except ValueError:
         pass
     else:
-        if tracing:
+        if tracing:  # whether to enable tracing logs
             tracing_path = path / "runtime_{time}.log"
             logger_.add(tracing_path, level="TRACE", retention=5)
 

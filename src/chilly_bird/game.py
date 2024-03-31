@@ -31,11 +31,11 @@ class Game:
     """
 
     def __init__(
-            self,
-            screen: pg.Surface,
-            states: Mapping[str, BaseState],
-            start_state: str,
-            cfg: MainConfig,
+        self,
+        screen: pg.Surface,
+        states: Mapping[str, BaseState],
+        start_state: str,
+        cfg: MainConfig,
     ) -> None:
         """Initialize the Game object."""
 

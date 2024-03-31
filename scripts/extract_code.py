@@ -31,5 +31,5 @@ def extract_code(package_path: str, output_file: str) -> None:
 
 if __name__ == "__main__":
     extract_code(
-        package_path="./src/chilly_bird", output_file="./out/extracted_code.txt"
+        package_path="./src/chilly_bird", output_file="./out/extracted_code_0.7.1.txt"
     )

@@ -1,6 +1,5 @@
 """Contains implemented state of the Flying scene."""
 
-# flake8: noqa: D107, D102
 from collections.abc import Mapping
 from random import randint
 from typing import TYPE_CHECKING
@@ -8,6 +7,7 @@ from typing import TYPE_CHECKING
 import pygame as pg
 from loguru import logger
 from pygame.sprite import AbstractGroup
+from typing_extensions import override
 
 from chilly_bird.configs import MainConfig
 from chilly_bird.objects.pipes import Pipe
@@ -21,6 +21,7 @@ if TYPE_CHECKING:
 class Flying(BaseState):
     """Flying scene."""
 
+    @override
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
@@ -58,6 +59,7 @@ class Flying(BaseState):
             }
         )
 
+    @override
     def on_enter(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
         self.score = 0
         self.game_is_over = False
@@ -70,6 +72,7 @@ class Flying(BaseState):
         self.groups.update({"bird": bird_group, "road": passed_groups["road"]})
         self.groups["pipes"].update(scroll_speed=self.scroll_speed)
 
+    @override
     def update(self, dt: int) -> None:
         self.inc_score()
         self.groups["score"].update(text=str(self.score))
@@ -77,9 +80,11 @@ class Flying(BaseState):
         self.generate_pipes()
         super().update(dt)
 
+    @override
     def draw(self, surface: pg.Surface) -> None:
         return super().draw(surface)
 
+    @override
     def on_exit(self) -> dict[str, AbstractGroup]:
         return self.groups
 
@@ -115,6 +120,7 @@ class Flying(BaseState):
             bird.visible = False
 
     def generate_pipes(self) -> None:
+        """Spawn and move pipes."""
         bird = self.groups["bird"].sprites()[0]
         pipe_group = self.groups["pipes"]
         if not self.game_is_over and bird.flying:

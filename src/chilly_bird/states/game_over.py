@@ -17,6 +17,7 @@ from chilly_bird.states.base import BaseState
 class GameOver(BaseState):
     """GameOver scene."""
 
+    @override
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:

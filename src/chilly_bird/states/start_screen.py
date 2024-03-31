@@ -6,6 +6,7 @@ from collections.abc import Mapping
 import pygame as pg
 from loguru import logger
 from pygame.event import Event
+from typing_extensions import override
 
 from chilly_bird import game, utils
 from chilly_bird.configs import MainConfig
@@ -19,7 +20,7 @@ from chilly_bird.states.base import BaseState
 class StartScreen(BaseState):
     """StartScreen scene with UI and instructions."""
 
-    # noinspection PyTypeChecker
+    @override
     def __init__(
         self, cfg: MainConfig | None = None, next_state: str | None = None
     ) -> None:
@@ -76,7 +77,7 @@ class StartScreen(BaseState):
                             cfg.main_scene.start_button_img
                         ).convert_alpha(),
                         button_event_name="start",
-                    ),  # type: ignore
+                    ),
                     Button(
                         pos=(
                             self.screen_rect.width // 2 - 40,
@@ -86,7 +87,7 @@ class StartScreen(BaseState):
                             cfg.main_scene.reskin_button_img
                         ).convert_alpha(),
                         button_event_name="reskin",
-                    ),  # type: ignore
+                    ),
                     Button(
                         pos=(
                             self.screen_rect.width // 4 - 40,
@@ -96,7 +97,7 @@ class StartScreen(BaseState):
                             cfg.main_scene.redress_button_img
                         ).convert_alpha(),
                         button_event_name="redress",
-                    ),  # type: ignore
+                    ),
                     Button(
                         pos=(
                             self.screen_rect.topright[0] - (26 + 10),
@@ -106,14 +107,16 @@ class StartScreen(BaseState):
                             cfg.main_scene.music_button_img
                         ).convert_alpha(),
                         button_event_name="toggle_music",
-                    ),  # type: ignore
+                    ),
                 ),
             }
         )
 
+    @override
     def on_enter(self, passed_groups: Mapping[str, pg.sprite.AbstractGroup]) -> None:
         super().on_enter(passed_groups)
 
+    @override
     def handle_event(self, event: Event) -> None:
         match event.type:
             case game.EventTypes.CUSTOM_BUTTON_PRESSED:
@@ -137,6 +140,7 @@ class StartScreen(BaseState):
                 pass
 
     def reskin_bird(self) -> None:
+        """Change the bird's skin, using sprite editor."""
         bird: Bird = self.groups["bird"].sprites()[0]
         if new_image := utils.open_editor(self.cfg.main_scene.bird_size):
             bird.images = [new_image] * 3
