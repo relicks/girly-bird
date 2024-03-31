@@ -10,4 +10,6 @@ build/
 .pdm-python
 .python-version
 __pycache__
-.ruff_cache
+.ruff_cache/
+.pyre/
+.pyre_configuration
