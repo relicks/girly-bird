@@ -14,7 +14,7 @@ def extract_code(package_path: str, output_file: str) -> None:
 
     """
     with Path(output_file).open("w", encoding="utf-8") as outfile:
-        for root, _dirs, _files in os.walk(package_path):
+        for root, *_ in os.walk(package_path):
             Path(root).glob("*.py")
             for file in Path(root).glob("*.py"):
                 file_path = os.path.relpath(file, package_path)
@@ -31,5 +31,5 @@ def extract_code(package_path: str, output_file: str) -> None:
 
 if __name__ == "__main__":
     extract_code(
-        package_path="./src/chilly_bird", output_file="./out/extracted_code_0.7.1.txt"
+        package_path="./src/chilly_bird", output_file="./out/extracted_code_0.7.2.txt"
     )
