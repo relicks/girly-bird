@@ -50,7 +50,7 @@ class Bird(pg.sprite.Sprite):
         self.visible = True
         # endregion
 
-        logger.info(f"{__class__} initialized")
+        logger.info(f"{self.__class__} initialized")
 
     def reset(self) -> None:
         """Reset the bird state to the starting one."""

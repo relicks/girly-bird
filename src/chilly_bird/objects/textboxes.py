@@ -31,7 +31,7 @@ class TextSprite(pg.sprite.Sprite):
         """
         super().__init__()
         self.font = font
-        self.previous_text = None
+        self.previous_text: str | None = None
         self.current_text = text
         self.color = color
         self.image = self.font.render(text, antialias=True, color=self.color)

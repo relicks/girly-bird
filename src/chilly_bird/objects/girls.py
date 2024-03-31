@@ -24,4 +24,4 @@ class Girl(pg.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect(topleft=pos)
 
-        logger.info(f"{__class__} initialized")
+        logger.info(f"{self.__class__} initialized")

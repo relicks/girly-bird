@@ -1,6 +1,7 @@
 """Contains implemented state of the Flying scene."""
 
 # flake8: noqa: D107, D102
+from collections.abc import Mapping
 from random import randint
 from typing import TYPE_CHECKING
 
@@ -41,7 +42,7 @@ class Flying(BaseState):
         self.pipe_freq = 1250  # New pipes appear every 1.25 seconds
         self.gap_btw_pipes = 100
         self.leftmost_pipe = pg.time.get_ticks() - self.pipe_freq
-        self.passed_leftmost_pipe = None
+        self.passed_leftmost_pipe: Pipe | None = None
 
         self.groups.update(
             {
@@ -57,7 +58,7 @@ class Flying(BaseState):
             }
         )
 
-    def on_enter(self, passed_groups: dict[str, AbstractGroup]) -> None:
+    def on_enter(self, passed_groups: Mapping[str, AbstractGroup]) -> None:
         self.score = 0
         self.game_is_over = False
         self.road_scroll = 0

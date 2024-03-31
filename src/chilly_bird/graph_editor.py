@@ -23,8 +23,8 @@ class GraphEditor:
         self.circle_color = pg.color.Color("black")
         self.curr_color = pg.color.Color("orangered2")
         self.min_circle_size = 10
-        self.selected_rect = None
-        self.curr_start = (0, 0)
+        self.selected_rect: pg.Rect | None = None
+        self.curr_start: Coordinate = (0, 0)
 
         self.user_image = utils.open_image((max_screen_w, max_screen_h))
         if self.user_image is None:
@@ -89,10 +89,11 @@ class GraphEditor:
             img.blit(self.user_image, (0, 0), area=self.selected_rect)
             ellipsify(img)
             return img
+        return None
 
     def run(self) -> pg.Surface | None:
         if self.user_image is None:
-            return
+            return None
         clock = pg.time.Clock()
         pg.time.wait(300)
         pg.event.clear()

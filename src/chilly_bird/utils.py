@@ -38,7 +38,7 @@ def create_rect(point1: Coordinate, point2: Coordinate) -> pg.Rect:
 
     This function takes two points, each represented as a tuple of (x, y)
     coordinates, and returns a Pygame Rect object that encompasses the area between
-    these two points. The Rect object is defined by its top-left corner (left, top) 
+    these two points. The Rect object is defined by its top-left corner (left, top)
     and its width and height.
 
     Args:
@@ -83,6 +83,7 @@ def open_image(max_size_box: tuple[int, int]) -> pg.Surface | None:
     if filename:
         img = pg.image.load(filename).convert_alpha()
         return scale_keep_ratio(img, max_size_box)
+    return None
 
 
 def open_editor(max_size_box: tuple[int, int]) -> pg.Surface | None:
@@ -100,3 +101,4 @@ def open_editor(max_size_box: tuple[int, int]) -> pg.Surface | None:
     with graph_editor.GraphEditor() as editor:
         if img := editor.run():
             return pg.transform.scale(img, max_size_box)
+    return None
