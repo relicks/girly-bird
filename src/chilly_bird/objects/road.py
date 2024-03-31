@@ -1,10 +1,16 @@
+"""Contains game's floor objects implementations."""
+
 import pygame as pg
 from loguru import logger
+from typing_extensions import override
 
 from chilly_bird.configs import MainConfig
 
 
 class Road(pg.sprite.Sprite):
+    """A road, acting as a game floor, implemented on top of pygame's `Sprite`."""
+
+    @override
     def __init__(self, cfg: MainConfig) -> None:
         super().__init__()
         logger.info("{} initialized", self.__class__)

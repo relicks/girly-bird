@@ -1,1 +1,1 @@
-"""Contains in-game Sprite based objects."""
+"""Contains in-game Sprite based objects with logic attached."""
