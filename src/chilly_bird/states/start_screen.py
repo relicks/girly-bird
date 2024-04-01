@@ -1,6 +1,5 @@
 """Contains implemented state of the Flying scene."""
 
-# flake8: noqa: D102
 from collections.abc import Mapping
 
 import pygame as pg

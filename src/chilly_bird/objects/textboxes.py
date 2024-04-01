@@ -39,7 +39,7 @@ class TextSprite(pg.sprite.Sprite):
 
     @override
     def update(self, *args: Any, **kwargs: Any) -> None:
-        new_text = kwargs.get("text")
+        new_text: str | None = kwargs.get("text")
         if new_text is not None and new_text != self.previous_text:
             self.previous_text = self.current_text
             self.current_text = new_text
