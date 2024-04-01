@@ -17,7 +17,7 @@ class Pipe(pg.sprite.Sprite):
     def __init__(
         self,
         pos: Coordinate,
-        direction: Literal["up"] | Literal["down"],
+        direction: Literal["up", "down"],
         pipe_gap: int,
         scroll_speed: int,
         cfg: MainConfig,

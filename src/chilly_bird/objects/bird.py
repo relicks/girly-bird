@@ -76,7 +76,7 @@ class Bird(pg.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
 
     @override
-    def update(self, *args: Any, **kwargs: Any) -> None:  # noqa: ANN401, D102
+    def update(self, *args: Any, **kwargs: Any) -> None:
         logger.trace("Bird updating")
         if self.flying:
             self.fly()
