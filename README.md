@@ -5,7 +5,9 @@
 - Python >= 3.10
 - Pygame compatible system
 
-## Running
+## Running from precompiled binaries
+
+## Running from source
 
 ### 1. Unix-like
 

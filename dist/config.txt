@@ -1,5 +1,0 @@
-;!@Install@!UTF-8!
-Title="Chilly Bird"
-InstallPath="%AppData%\Roaming"
-RunProgram="chilly-bird.exe"
-;!@InstallEnd@!

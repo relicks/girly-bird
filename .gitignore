@@ -6,6 +6,7 @@ logs/
 out/
 src/*.egg-info
 build/
+bin/
 
 .pdm-python
 .python-version
